@@ -168,16 +168,7 @@ Then open: `http://localhost:8000`
 - ✅ View their own events
 - ✅ View registrations for their events
 - ✅ Delete their own events
-- ❌ Cannot approve events
 - ❌ Cannot register for events
-
-### Faculty Coordinator
-- ✅ View all events (pending, approved, rejected)
-- ✅ Approve events
-- ✅ Reject events
-- ❌ Cannot create events
-- ❌ Cannot register for events
-
 ---
 
 ## 🎨 Pages Overview
@@ -208,12 +199,6 @@ Then open: `http://localhost:8000`
 - See registration list for each event
 - Delete events
 - Statistics: Total events, approved, pending
-
-### Faculty Dashboard (`faculty-dashboard.html`)
-- Review pending events
-- Approve/Reject events
-- View approved and rejected events
-- Statistics: Pending, approved, rejected counts
 
 ---
 
@@ -271,13 +256,6 @@ Then open: `http://localhost:8000`
 4. **Submit**: Wait for faculty approval
 5. **View Registrations**: See who registered for your event
 
-### For Faculty
-
-1. **Login**: Use faculty credentials (created by admin)
-2. **Review Events**: See pending events
-3. **Approve/Reject**: Click action buttons
-4. **Track**: View approved/rejected events
-
 ---
 
 ## 🐛 Troubleshooting
@@ -305,27 +283,7 @@ Then open: `http://localhost:8000`
 
 ## 🚀 Deployment
 
-### Deploy to Netlify
-
-1. Push code to GitHub
-2. Connect repository to Netlify
-3. Build settings: Not needed (static site)
-4. Deploy!
-
-### Deploy to Vercel
-
-1. Push code to GitHub
-2. Import project in Vercel
-3. Deploy!
-
-### Deploy to GitHub Pages
-
-1. Push code to GitHub
-2. Go to Settings > Pages
-3. Select branch and folder
-4. Save and visit your site!
-
-**Note**: Update `SUPABASE_URL` and `SUPABASE_ANON_KEY` before deploying!
+### Deployed in vercel
 
 ---
 
