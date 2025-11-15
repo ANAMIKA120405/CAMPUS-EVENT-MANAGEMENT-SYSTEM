@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Event Management - Home</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="assets/images/jain-logo.png" alt="Jain University Logo" class="brand-logo">
+                <h2>Campus Events</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="#" id="dashboardLink" class="nav-link" style="display: none;">Dashboard</a>
+                <a href="login.html" id="loginLink" class="nav-link">Login</a>
+                <a href="signup.html" id="signupLink" class="nav-link">Sign Up</a>
+                <button id="logoutBtn" class="btn btn-secondary" style="display: none;">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Discover Campus Events</h1>
+            <p>Find and register for exciting events happening on campus</p>
+        </div>
+    </section>
+
+    <!-- Search and Filter Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search events by title, venue, or description...">
+                <select id="categoryFilter" class="filter-select">
+                    <option value="">All Categories</option>
+                    <option value="technical">Technical</option>
+                    <option value="cultural">Cultural</option>
+                    <option value="sports">Sports</option>
+                    <option value="workshop">Workshop</option>
+                    <option value="seminar">Seminar</option>
+                    <option value="other">Other</option>
+                </select>
+                <button id="searchBtn" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Grid Section -->
+    <section class="events-section">
+        <div class="container">
+            <h2>Upcoming Events</h2>
+            <div id="eventsGrid" class="events-grid">
+                <!-- Event cards will be dynamically loaded here -->
+                <div class="loading-spinner">Loading events...</div>
+            </div>
+            <div id="noEventsMessage" class="no-events" style="display: none;">
+                <p>No events found matching your criteria.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Detail Modal -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div id="modalBody">
+                <!-- Event details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Campus Event Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module" src="js/supabase.js?v=5"></script>
+    <script type="module" src="js/auth.js?v=5"></script>
+    <script type="module" src="js/events.js?v=5"></script>
+    <script type="module">
+        import { supabase } from './js/supabase.js?v=5';
+        import { checkAuthState } from './js/auth.js?v=5';
+        import { loadEvents, searchAndFilterEvents } from './js/events.js?v=5';
+
+        // Check authentication state on page load
+        checkAuthState();
+
+        // Load all approved events
+        loadEvents();
+
+        // Search and filter functionality
+        document.getElementById('searchBtn').addEventListener('click', () => {
+            const searchTerm = document.getElementById('searchInput').value;
+            const category = document.getElementById('categoryFilter').value;
+            searchAndFilterEvents(searchTerm, category);
+        });
+
+        // Real-time search on input
+        document.getElementById('searchInput').addEventListener('input', () => {
+            const searchTerm = document.getElementById('searchInput').value;
+            const category = document.getElementById('categoryFilter').value;
+            searchAndFilterEvents(searchTerm, category);
+        });
+
+        document.getElementById('categoryFilter').addEventListener('change', () => {
+            const searchTerm = document.getElementById('searchInput').value;
+            const category = document.getElementById('categoryFilter').value;
+            searchAndFilterEvents(searchTerm, category);
+        });
+    </script>
+</body>
+</html>

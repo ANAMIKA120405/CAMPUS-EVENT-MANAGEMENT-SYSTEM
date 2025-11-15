@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Dashboard - Campus Events</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="assets/images/jain-logo.png" alt="Jain University Logo" class="brand-logo">
+                <h2>Campus Events</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="faculty-dashboard.html" class="nav-link active">Dashboard</a>
+                <span class="user-name" id="userName"></span>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+        <div class="container">
+            <h1>Faculty Coordinator Dashboard</h1>
+            <p>Review and approve campus events</p>
+        </div>
+    </section>
+
+    <!-- Dashboard Content -->
+    <section class="dashboard-section">
+        <div class="container">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-info">
+                        <h3 id="pendingCount">0</h3>
+                        <p>Pending Events</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <h3 id="approvedCount">0</h3>
+                        <p>Approved Events</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">❌</div>
+                    <div class="stat-info">
+                        <h3 id="rejectedCount">0</h3>
+                        <p>Rejected Events</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pending Events Section -->
+            <div class="dashboard-content">
+                <div class="section-header">
+                    <h2>Pending Events for Review</h2>
+                    <div class="filter-buttons">
+                        <button class="btn btn-secondary filter-btn active" data-filter="pending">Pending</button>
+                        <button class="btn btn-secondary filter-btn" data-filter="approved">Approved</button>
+                        <button class="btn btn-secondary filter-btn" data-filter="rejected">Rejected</button>
+                    </div>
+                </div>
+
+                <div id="eventsGrid" class="events-grid">
+                    <div class="loading-spinner">Loading events...</div>
+                </div>
+
+                <div id="noEvents" class="no-events" style="display: none;">
+                    <p>No events found.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Review Modal -->
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div id="reviewModalBody">
+                <!-- Event review details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Campus Event Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { supabase } from './js/supabase.js';
+        import { checkAuthAndRole, handleLogout } from './js/auth.js';
+        import { loadFacultyEvents, approveEvent, rejectEvent } from './js/dashboard.js';
+
+        // Check if user is authenticated and has faculty role
+        await checkAuthAndRole('faculty');
+
+        // Load pending events for review
+        loadFacultyEvents('pending');
+
+        // Filter buttons
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.getAttribute('data-filter');
+                loadFacultyEvents(filter);
+            });
+        });
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    </script>
+</body>
+</html>

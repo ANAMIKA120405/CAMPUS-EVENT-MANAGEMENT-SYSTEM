@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizer Dashboard - Campus Events</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="assets/images/jain-logo.png" alt="Jain University Logo" class="brand-logo">
+                <h2>Campus Events</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="organizer-dashboard.html" class="nav-link active">Dashboard</a>
+                <span class="user-name" id="userName"></span>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+        <div class="container">
+            <h1>Organizer Dashboard</h1>
+            <p>Create and manage your events</p>
+        </div>
+    </section>
+
+    <!-- Dashboard Content -->
+    <section class="dashboard-section">
+        <div class="container">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-info">
+                        <h3 id="totalEvents">0</h3>
+                        <p>Total Events</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <h3 id="approvedEvents">0</h3>
+                        <p>Live Events</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Event Form -->
+            <div class="dashboard-content">
+                <div class="section-header">
+                    <h2>Create New Event</h2>
+                    <button id="toggleFormBtn" class="btn btn-primary">+ New Event</button>
+                </div>
+
+                <div id="createEventForm" class="form-container" style="display: none;">
+                    <form id="eventForm" class="event-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="title">Event Title *</label>
+                                <input type="text" id="title" required class="form-input" 
+                                       placeholder="Enter event title">
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Category *</label>
+                                <select id="category" required class="form-select">
+                                    <option value="">Select category</option>
+                                    <option value="technical">Technical</option>
+                                    <option value="cultural">Cultural</option>
+                                    <option value="sports">Sports</option>
+                                    <option value="workshop">Workshop</option>
+                                    <option value="seminar">Seminar</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description *</label>
+                            <textarea id="description" required class="form-textarea" rows="4"
+                                      placeholder="Describe your event..."></textarea>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="venue">Venue *</label>
+                                <input type="text" id="venue" required class="form-input" 
+                                       placeholder="Event location">
+                            </div>
+                            <div class="form-group">
+                                <label for="capacity">Capacity *</label>
+                                <input type="number" id="capacity" required class="form-input" 
+                                       placeholder="Maximum attendees" min="1">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="eventDate">Event Date *</label>
+                                <input type="date" id="eventDate" required class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="eventTime">Event Time *</label>
+                                <input type="time" id="eventTime" required class="form-input">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="poster">Event Poster</label>
+                            <input type="file" id="poster" accept="image/*" class="form-input">
+                            <small class="form-hint">Upload an image (JPG, PNG, max 5MB)</small>
+                        </div>
+
+                        <div id="formError" class="error-message" style="display: none;"></div>
+                        <div id="formSuccess" class="success-message" style="display: none;"></div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="submitEventBtn">Create Event</button>
+                            <button type="button" class="btn btn-secondary" id="cancelFormBtn">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- My Events List -->
+                <div class="section-header" style="margin-top: 3rem;">
+                    <h2>My Events</h2>
+                </div>
+
+                <div id="myEventsGrid" class="events-grid">
+                    <div class="loading-spinner">Loading your events...</div>
+                </div>
+
+                <div id="noEvents" class="no-events" style="display: none;">
+                    <p>You haven't created any events yet.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Registrations Modal -->
+    <div id="registrationsModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div id="registrationsModalBody">
+                <!-- Registrations list will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Campus Event Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { supabase } from './js/supabase.js?v=4';
+        import { checkAuthAndRole, handleLogout } from './js/auth.js?v=4';
+        import { loadOrganizerEvents, createEvent, viewEventRegistrations } from './js/dashboard.js?v=4';
+
+        // Check if user is authenticated and has organizer role
+        await checkAuthAndRole('organizer');
+
+        // Load organizer's events
+        loadOrganizerEvents();
+
+        // Toggle create event form
+        const toggleFormBtn = document.getElementById('toggleFormBtn');
+        const createEventForm = document.getElementById('createEventForm');
+        const cancelFormBtn = document.getElementById('cancelFormBtn');
+
+        toggleFormBtn.addEventListener('click', () => {
+            createEventForm.style.display = createEventForm.style.display === 'none' ? 'block' : 'none';
+            toggleFormBtn.textContent = createEventForm.style.display === 'none' ? '+ New Event' : 'Hide Form';
+        });
+
+        cancelFormBtn.addEventListener('click', () => {
+            createEventForm.style.display = 'none';
+            toggleFormBtn.textContent = '+ New Event';
+            document.getElementById('eventForm').reset();
+        });
+
+        // Handle event creation
+        document.getElementById('eventForm').addEventListener('submit', createEvent);
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    </script>
+</body>
+</html>

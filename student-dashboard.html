@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Campus Events</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="assets/images/jain-logo.png" alt="Jain University Logo" class="brand-logo">
+                <h2>Campus Events</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="student-dashboard.html" class="nav-link active">Dashboard</a>
+                <span class="user-name" id="userName"></span>
+                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Header -->
+    <section class="dashboard-header">
+        <div class="container">
+            <h1>Student Dashboard</h1>
+            <p>Manage your event registrations</p>
+        </div>
+    </section>
+
+    <!-- Dashboard Content -->
+    <section class="dashboard-section">
+        <div class="container">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-info">
+                        <h3 id="totalRegistrations">0</h3>
+                        <p>Total Registrations</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏰</div>
+                    <div class="stat-info">
+                        <h3 id="upcomingEvents">0</h3>
+                        <p>Upcoming Events</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registered Events Section -->
+            <div class="dashboard-content">
+                <div class="section-header">
+                    <h2>My Registered Events</h2>
+                    <a href="index.html" class="btn btn-primary">Browse More Events</a>
+                </div>
+
+                <div id="registeredEventsGrid" class="events-grid">
+                    <div class="loading-spinner">Loading your registrations...</div>
+                </div>
+
+                <div id="noRegistrations" class="no-events" style="display: none;">
+                    <p>You haven't registered for any events yet.</p>
+                    <a href="index.html" class="btn btn-primary">Explore Events</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Detail Modal -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div id="modalBody">
+                <!-- Event details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Campus Event Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { supabase } from './js/supabase.js?v=4';
+        import { checkAuthAndRole, handleLogout } from './js/auth.js?v=4';
+        import { loadStudentRegistrations, unregisterFromEvent } from './js/dashboard.js?v=4';
+
+        // Check if user is authenticated and has student role
+        await checkAuthAndRole('student');
+
+        // Load student's registered events
+        loadStudentRegistrations();
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+    </script>
+</body>
+</html>

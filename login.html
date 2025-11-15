@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Campus Event Management</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="assets/images/jain-logo.png" alt="Jain University Logo" class="brand-logo">
+                <h2>Campus Events</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="login.html" class="nav-link active">Login</a>
+                <a href="signup.html" class="nav-link">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Form Section -->
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h2>Welcome Back</h2>
+                    <p class="auth-subtitle">Login to manage your campus events</p>
+                    
+                    <form id="loginForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required 
+                                   placeholder="your.email@university.edu"
+                                   class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required 
+                                   placeholder="Enter your password"
+                                   class="form-input">
+                        </div>
+
+                        <div id="errorMessage" class="error-message" style="display: none;"></div>
+                        <div id="successMessage" class="success-message" style="display: none;"></div>
+
+                        <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
+                            Login
+                        </button>
+                    </form>
+
+                    <div class="auth-footer">
+                        <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Campus Event Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { supabase } from './js/supabase.js?v=4';
+        import { handleLogin } from './js/auth.js?v=4';
+
+        // Handle form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('loginBtn');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+
+            // Clear previous messages
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+
+            // Disable button and show loading state
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Logging in...';
+
+            try {
+                await handleLogin(email, password);
+            } catch (error) {
+                errorMessage.textContent = error.message;
+                errorMessage.style.display = 'block';
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Login';
+            }
+        });
+    </script>
+</body>
+</html>

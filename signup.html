@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Campus Event Management</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="assets/images/jain-logo.png" alt="Jain University Logo" class="brand-logo">
+                <h2>Campus Events</h2>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="login.html" class="nav-link">Login</a>
+                <a href="signup.html" class="nav-link active">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Signup Form Section -->
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h2>Create Account</h2>
+                    <p class="auth-subtitle">Join our campus event community</p>
+                    
+                    <form id="signupForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" name="name" required 
+                                   placeholder="Enter your full name"
+                                   class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" name="email" required 
+                                   placeholder="your.email@university.edu"
+                                   class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required 
+                                   placeholder="Create a strong password (min 6 characters)"
+                                   minlength="6"
+                                   class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required 
+                                   placeholder="Re-enter your password"
+                                   class="form-input">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="role">Select Your Role</label>
+                            <select id="role" name="role" required class="form-select">
+                                <option value="">Choose your role...</option>
+                                <option value="student">Student</option>
+                                <option value="organizer">Event Organizer</option>
+                            </select>
+                            <small class="form-hint">Faculty accounts are created by administrators</small>
+                        </div>
+
+                        <div id="errorMessage" class="error-message" style="display: none;"></div>
+                        <div id="successMessage" class="success-message" style="display: none;"></div>
+
+                        <button type="submit" class="btn btn-primary btn-block" id="signupBtn">
+                            Create Account
+                        </button>
+                    </form>
+
+                    <div class="auth-footer">
+                        <p>Already have an account? <a href="login.html">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Campus Event Management System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script type="module">
+        import { supabase } from './js/supabase.js?v=4';
+        import { handleSignup } from './js/auth.js?v=4';
+
+        // Handle form submission
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const role = document.getElementById('role').value;
+            
+            const signupBtn = document.getElementById('signupBtn');
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+
+            // Clear previous messages
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+
+            // Validation
+            if (password !== confirmPassword) {
+                errorMessage.textContent = 'Passwords do not match!';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            if (password.length < 6) {
+                errorMessage.textContent = 'Password must be at least 6 characters long!';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            if (!role) {
+                errorMessage.textContent = 'Please select your role!';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            // Disable button and show loading state
+            signupBtn.disabled = true;
+            signupBtn.textContent = 'Creating account...';
+
+            try {
+                await handleSignup(name, email, password, role);
+            } catch (error) {
+                errorMessage.textContent = error.message;
+                errorMessage.style.display = 'block';
+                signupBtn.disabled = false;
+                signupBtn.textContent = 'Create Account';
+            }
+        });
+    </script>
+</body>
+</html>
