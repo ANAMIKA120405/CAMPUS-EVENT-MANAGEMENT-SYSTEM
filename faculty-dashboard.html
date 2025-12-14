@@ -8,7 +8,10 @@
     <link rel="stylesheet" href="styles/components.css">
 </head>
 <body>
-    <!-- Navigation Bar -->
+    <!-- ========================================
+         NAVIGATION BAR
+         Shared component across all dashboards
+    ========================================= -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-brand">
@@ -18,13 +21,17 @@
             <div class="nav-menu">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="faculty-dashboard.html" class="nav-link active">Dashboard</a>
+                <!-- Populated dynamically with authenticated user's name -->
                 <span class="user-name" id="userName"></span>
                 <button id="logoutBtn" class="btn btn-secondary">Logout</button>
             </div>
         </div>
     </nav>
 
-    <!-- Dashboard Header -->
+    <!-- ========================================
+         FACULTY DASHBOARD HEADER
+         Role-specific: Faculty Coordinator view
+    ========================================= -->
     <section class="dashboard-header">
         <div class="container">
             <h1>Faculty Coordinator Dashboard</h1>
@@ -32,14 +39,18 @@
         </div>
     </section>
 
-    <!-- Dashboard Content -->
+    <!-- ========================================
+         FACULTY DASHBOARD CONTENT
+         Main faculty interface for event monitoring
+    ========================================= -->
     <section class="dashboard-section">
         <div class="container">
-            <!-- Stats Cards -->
+            <!-- Event Statistics Cards -->
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-icon">⏳</div>
                     <div class="stat-info">
+                        <!-- Dynamically updated from database -->
                         <h3 id="pendingCount">0</h3>
                         <p>Pending Events</p>
                     </div>
@@ -60,10 +71,11 @@
                 </div>
             </div>
 
-            <!-- Pending Events Section -->
+            <!-- Event List Section with Filters -->
             <div class="dashboard-content">
                 <div class="section-header">
                     <h2>Pending Events for Review</h2>
+                    <!-- Filter controls for event status -->
                     <div class="filter-buttons">
                         <button class="btn btn-secondary filter-btn active" data-filter="pending">Pending</button>
                         <button class="btn btn-secondary filter-btn" data-filter="approved">Approved</button>
@@ -71,10 +83,12 @@
                     </div>
                 </div>
 
+                <!-- Event cards populated dynamically via JavaScript -->
                 <div id="eventsGrid" class="events-grid">
                     <div class="loading-spinner">Loading events...</div>
                 </div>
 
+                <!-- Empty state message (hidden by default) -->
                 <div id="noEvents" class="no-events" style="display: none;">
                     <p>No events found.</p>
                 </div>
@@ -82,36 +96,46 @@
         </div>
     </section>
 
-    <!-- Event Review Modal -->
+    <!-- ========================================
+         EVENT REVIEW MODAL
+         Reusable modal for detailed event review
+    ========================================= -->
     <div id="reviewModal" class="modal">
         <div class="modal-content">
             <span class="modal-close">&times;</span>
+            <!-- Modal body content injected dynamically -->
             <div id="reviewModalBody">
                 <!-- Event review details will be loaded here -->
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- ========================================
+         FOOTER
+         Shared component across all pages
+    ========================================= -->
     <footer class="footer">
         <div class="container">
             <p>&copy; 2025 Campus Event Management System. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- Scripts -->
+    <!-- ========================================
+         SCRIPTS - Faculty Dashboard Logic
+         Role-restricted: Faculty access only
+    ========================================= -->
     <script type="module">
         import { supabase } from './js/supabase.js';
         import { checkAuthAndRole, handleLogout } from './js/auth.js';
         import { loadFacultyEvents, approveEvent, rejectEvent } from './js/dashboard.js';
 
-        // Check if user is authenticated and has faculty role
+        // Enforce faculty role requirement - redirects unauthorized users
         await checkAuthAndRole('faculty');
 
-        // Load pending events for review
+        // Initialize dashboard with pending events
         loadFacultyEvents('pending');
 
-        // Filter buttons
+        // Event status filter functionality
         const filterButtons = document.querySelectorAll('.filter-btn');
         filterButtons.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -122,7 +146,7 @@
             });
         });
 
-        // Logout functionality
+        // Logout handler
         document.getElementById('logoutBtn').addEventListener('click', handleLogout);
     </script>
 </body>
