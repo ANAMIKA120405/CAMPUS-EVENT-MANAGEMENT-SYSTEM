@@ -59,10 +59,6 @@ CAMPUS-EVENT-MANAGEMENT-SYSTEM/
 - No email notifications.
 - Events cannot be edited after creation.
 
-## Project Collaboration
-
-This project was developed as a collaborative effort.
-
 ## License
 
 MIT License
