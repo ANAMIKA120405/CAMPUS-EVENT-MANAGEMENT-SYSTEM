@@ -1,16 +1,211 @@
 # Campus Event Management System
 
-A full-stack campus event management system built with **HTML, CSS, JavaScript** (frontend) and **Supabase** (backend).
+A full-stack web application for managing campus events, built with vanilla JavaScript and Supabase backend. Features role-based access control, dynamic event registration with capacity management, and file upload capabilities.
 
-## 🎓 Features
+**Deployment Status:** Configured for Vercel deployment
 
-- **User Authentication**: Email/password authentication with role-based access
-- **Three User Roles**: Student, Event Organizer, Faculty Coordinator
-- **Event Management**: Create, approve, and browse campus events
-- **Student Registration**: Students can register for approved events
-- **Capacity Management**: Automatic seat count decrement
-- **File Upload**: Event poster upload to Supabase Storage
-- **Row-Level Security**: Database protected by RLS policies
+---
+
+## 📋 Project Overview
+
+This system enables students to discover and register for campus events, organizers to create and manage events, and faculty to monitor event activities. Built without frameworks, using modern web standards and Supabase as the backend infrastructure.
+
+---
+
+## ✨ Core Features
+
+- **User Authentication**: Email/password authentication with three distinct user roles
+- **Event Browsing**: Public homepage displays approved events with search and category filtering
+- **Event Registration**: Students can register for events with automatic capacity management
+- **Event Creation**: Organizers can create events with details and poster images
+- **Event Monitoring**: Faculty can view all events and registration statistics
+- **File Upload**: Event poster upload to Supabase Storage (max 5MB)
+- **Security**: Row-Level Security (RLS) policies protect all database operations
+
+---
+
+## 👥 User Roles & Permissions
+
+### Student
+- ✅ Browse and search approved events
+- ✅ Register for events (prevents duplicates, enforces capacity)
+- ✅ View personal registration history
+- ✅ Cancel event registrations
+- ❌ Cannot create events
+
+### Event Organizer
+- ✅ Create events with title, description, venue, date, time, capacity
+- ✅ Upload event posters (images up to 5MB)
+- ✅ View all events they created
+- ✅ View registration lists for their events
+- ✅ Delete their own events
+- ❌ Cannot register for events
+
+### Faculty Coordinator
+- ✅ View all events across the system
+- ✅ Monitor registration statistics
+- ✅ Access event and registration data for auditing
+- ❌ Cannot create or register for events
+
+> **Note:** Events are **automatically approved** upon creation. Faculty role is currently informational/monitoring only.
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+- HTML5 (semantic markup)
+- CSS3 (responsive design with CSS variables, Grid, Flexbox)
+- JavaScript ES6+ (modular code with ES modules)
+- Supabase JS Client v2 (via CDN)
+
+### Backend
+- **Supabase PostgreSQL** - Database with Row-Level Security
+- **Supabase Auth** - User authentication and session management
+- **Supabase Storage** - File storage for event posters
+
+### Deployment
+- **Vercel** - Deployment-ready configuration for static hosting
+
+---
+
+## 🚀 Setup Instructions
+
+### Prerequisites
+
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+- [Supabase account](https://supabase.com) (free tier)
+- **One of the following** for local development:
+  - VS Code with Live Server extension
+  - Python 3.x (`python -m http.server`)
+  - Node.js (`npx http-server`)
+- Git (for cloning the repository)
+
+---
+
+### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/ANAMIKA120405/CAMPUS-EVENT-MANAGEMENT-SYSTEM.git
+cd CAMPUS-EVENT-MANAGEMENT-SYSTEM
+```
+
+---
+
+### Step 2: Create Supabase Project
+
+1. Go to [https://supabase.com](https://supabase.com)
+2. Create a new project
+3. Wait for database initialization (2-3 minutes)
+4. Note your **Project URL** and **anon public key** from **Settings > API**
+
+---
+
+### Step 3: Set Up Database Schema
+
+1. In Supabase dashboard, open **SQL Editor**
+2. Create a new query
+3. Copy and paste the contents of `database/schema.sql`
+4. Click **Run** to create tables (profiles, events, registrations)
+
+---
+
+### Step 4: ⚠️ MANDATORY - Run Column Migration
+
+**IMPORTANT:** The application code expects renamed columns. You **must** run this migration:
+
+1. Open **SQL Editor** again
+2. Create a new query
+3. Copy and paste the contents of `database/fix_columns.sql`
+4. Click **Run** to rename columns:
+   - `name` → `full_name` (in profiles)
+   - `capacity` → `max_participants` (in events)
+   - `student_id` → `user_id` (in registrations)
+
+**Without this step, the application will fail to load data.**
+
+---
+
+### Step 5: Enable Row-Level Security
+
+1. Open **SQL Editor** again
+2. Create a new query
+3. Copy and paste the contents of `database/rls-policies.sql`
+4. Click **Run** to enable security policies
+
+---
+
+### Step 6: Create Storage Bucket
+
+1. Navigate to **Storage** in Supabase dashboard
+2. Click **New bucket**
+3. Bucket name: `event-images` (exactly this name!)
+4. Check **Public bucket** ✅
+5. Click **Create bucket**
+
+---
+
+### Step 7: Configure Application Credentials
+
+1. Open `js/supabase.js` in your code editor
+2. Update these two constants with your Supabase credentials:
+
+```javascript
+const SUPABASE_URL = 'https://your-project-id.supabase.co';
+const SUPABASE_ANON_KEY = 'your-anon-public-key-here';
+```
+
+**Where to find these:**
+- Supabase Dashboard → **Settings** → **API**
+- Use the **Project URL** and **anon public** key (NOT the service_role key)
+
+---
+
+### Step 8: Run the Application Locally
+
+Choose one method:
+
+**Option A: VS Code Live Server (Recommended)**
+```bash
+# Install Live Server extension in VS Code
+# Right-click index.html → "Open with Live Server"
+```
+
+**Option B: Python HTTP Server**
+```bash
+python -m http.server 8000
+# Open http://localhost:8000
+```
+
+**Option C: Node.js HTTP Server**
+```bash
+npx http-server -p 8000
+# Open http://localhost:8000
+```
+
+---
+
+### Step 9: Create Test Accounts
+
+**Student Account:**
+1. Navigate to Signup page
+2. Fill form with role = "Student"
+3. Login and access Student Dashboard
+
+**Organizer Account:**
+1. Navigate to Signup page
+2. Fill form with role = "Event Organizer"
+3. Login and access Organizer Dashboard
+
+**Faculty Account (Manual Creation):**
+1. In Supabase Dashboard → **Authentication** → **Users** → **Add user**
+2. Create user with email/password
+3. In **SQL Editor**, run:
+```sql
+INSERT INTO public.profiles (id, full_name, role)
+VALUES ('USER_ID_FROM_AUTH', 'Faculty Name', 'faculty');
+```
+(Replace `USER_ID_FROM_AUTH` with the actual UUID from the auth.users table)
 
 ---
 
@@ -20,308 +215,171 @@ A full-stack campus event management system built with **HTML, CSS, JavaScript**
 CAMPUS-EVENT-MANAGEMENT-SYSTEM/
 ├── index.html                    # Home page (public event listing)
 ├── login.html                    # Login page
-├── signup.html                   # Signup page
+├── signup.html                   # Signup page with role selection
 ├── student-dashboard.html        # Student dashboard
 ├── organizer-dashboard.html      # Organizer dashboard
-├── faculty-dashboard.html        # Faculty dashboard
+├── faculty-dashboard.html        # Faculty monitoring dashboard
 ├── styles/
-│   ├── main.css                  # Main stylesheet
-│   └── components.css            # Component styles
+│   ├── main.css                  # Main styles, layout, variables
+│   └── components.css            # Component-specific styles
 ├── js/
-│   ├── supabase.js               # Supabase client initialization
-│   ├── auth.js                   # Authentication logic
-│   ├── events.js                 # Event operations
-│   └── dashboard.js              # Dashboard logic
+│   ├── supabase.js               # Supabase client & storage helpers
+│   ├── auth.js                   # Authentication & role-based routing
+│   ├── events.js                 # Event operations & registration
+│   └── dashboard.js              # Dashboard logic for all roles
 ├── database/
-│   ├── schema.sql                # Database schema
-│   └── rls-policies.sql          # Row-level security policies
-└── README.md                     # This file
+│   ├── schema.sql                # Base database schema
+│   ├── fix_columns.sql           # MANDATORY migration script
+│   └── rls-policies.sql          # Row-Level Security policies
+├── assets/
+│   └── images/                   # Static images
+└── vercel.json                   # Vercel deployment config
 ```
 
 ---
 
-## 🚀 Setup Instructions
+## 🔐 Security Implementation
 
-### 1. Create a Supabase Project
+### Row-Level Security Policies
 
-1. Go to [https://supabase.com](https://supabase.com)
-2. Click "Start your project"
-3. Create a new organization (if needed)
-4. Create a new project
-5. Wait for the database to initialize
+- **Profiles**: Users can only modify their own profile data
+- **Events**: Public can read approved events; organizers manage their own
+- **Registrations**: Students manage their own; organizers view their event registrations
+- **Faculty**: Can view all data for monitoring purposes
 
-### 2. Set Up Database
+### Additional Security Measures
 
-#### Step 1: Run Schema SQL
-
-1. In your Supabase dashboard, go to **SQL Editor**
-2. Click "New query"
-3. Copy the contents of `database/schema.sql` (provided below)
-4. Paste and click "Run"
-5. Verify tables are created under **Table Editor**
-
-#### Step 2: Enable Row-Level Security
-
-1. Go to **SQL Editor** again
-2. Create another new query
-3. Copy the contents of `database/rls-policies.sql` (provided below)
-4. Paste and click "Run"
-
-### 3. Create Storage Bucket
-
-1. Go to **Storage** in your Supabase dashboard
-2. Click "New bucket"
-3. Name: `event-posters`
-4. **Public bucket**: ✅ (check this box)
-5. Click "Create bucket"
-
-#### Configure CORS (if needed)
-
-If you're testing locally and encounter CORS issues:
-
-1. In your bucket settings, add allowed origins
-2. Add: `http://localhost:3000`, `http://127.0.0.1:5500` (or your local dev server)
-
-### 4. Configure Frontend
-
-#### Update `js/supabase.js`
-
-1. Open `js/supabase.js`
-2. Replace the placeholder values:
-
-```javascript
-const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
-const SUPABASE_ANON_KEY = 'YOUR_ANON_PUBLIC_KEY';
-```
-
-**Where to find these:**
-- Go to **Settings** > **API** in your Supabase dashboard
-- Copy **Project URL** → Replace `SUPABASE_URL`
-- Copy **anon/public** key → Replace `SUPABASE_ANON_KEY`
-
-### 5. Run the Application
-
-#### Option 1: Using Live Server (VS Code)
-
-1. Install the "Live Server" extension in VS Code
-2. Right-click `index.html`
-3. Select "Open with Live Server"
-
-#### Option 2: Using Python HTTP Server
-
-```bash
-python -m http.server 8000
-```
-
-Then open: `http://localhost:8000`
-
-#### Option 3: Using Node.js HTTP Server
-
-```bash
-npx http-server -p 8000
-```
-
-Then open: `http://localhost:8000`
-
----
-
-## 📊 Database Schema
-
-### Tables
-
-#### 1. `profiles`
-- Links to Supabase Auth users
-- Stores user name and role
-
-#### 2. `events`
-- Stores event information
-- Includes status (pending, approved, rejected)
-- Has capacity tracking
-
-#### 3. `registrations`
-- Links students to events
-- Prevents duplicate registrations
-- Auto-decrements event capacity
-
-### Server Function
-
-**`register_student(p_event_id, p_student_id)`**
-- Atomic registration with capacity check
-- Prevents race conditions
-- Returns registration ID on success
-
----
-
-## 🔐 User Roles & Permissions
-
-### Student
-- ✅ Browse approved events
-- ✅ Register for events
-- ✅ View registered events
-- ✅ Cancel registrations
-- ❌ Cannot create events
-- ❌ Cannot approve events
-
-### Event Organizer
-- ✅ Create events
-- ✅ Upload event posters
-- ✅ View their own events
-- ✅ View registrations for their events
-- ✅ Delete their own events
-- ❌ Cannot register for events
----
-
-## 🎨 Pages Overview
-
-### Home (`index.html`)
-- Public page showing all approved events
-- Search and filter functionality
-- Event detail modal
-- Registration button (for logged-in students)
-
-### Login (`login.html`)
-- Email/password authentication
-- Auto-redirect to role-based dashboard
-
-### Signup (`signup.html`)
-- Create account with name, email, password
-- Select role: Student or Organizer
-- Faculty accounts created by admins
-
-### Student Dashboard (`student-dashboard.html`)
-- View registered events
-- Cancel registrations
-- Statistics: Total registrations, upcoming events
-
-### Organizer Dashboard (`organizer-dashboard.html`)
-- Create new events with poster upload
-- View created events
-- See registration list for each event
-- Delete events
-- Statistics: Total events, approved, pending
-
----
-
-## 🛠️ Technology Stack
-
-### Frontend
-- **HTML5**: Semantic markup
-- **CSS3**: Modern responsive design with CSS variables
-- **JavaScript (ES6+)**: Modular code with ES modules
-- **Supabase JS Client**: v2 (loaded via CDN)
-
-### Backend
-- **Supabase**: PostgreSQL database
-- **Supabase Auth**: User authentication
-- **Supabase Storage**: File uploads
-- **Row-Level Security**: Database access control
-
----
-
-## 🔒 Security Features
-
-### Authentication
-- Secure password hashing (handled by Supabase Auth)
-- Session management
-- Auto-logout on token expiration
-
-### Row-Level Security (RLS)
-- Students can only view/modify their own registrations
-- Organizers can only modify their own events
-- Faculty can only update event status
-- Public can only read approved events
-
-### Input Validation
-- Frontend form validation
-- File size limits (5MB for posters)
-- SQL injection prevention (Supabase handles this)
-
----
-
-## 📝 Usage Guide
-
-### For Students
-
-1. **Sign Up**: Create account with student role
-2. **Browse Events**: View approved events on home page
-3. **Register**: Click "View Details" → "Register Now"
-4. **View Registrations**: Check your dashboard
-5. **Cancel**: Click "Cancel Registration" if needed
-
-### For Organizers
-
-1. **Sign Up**: Create account with organizer role
-2. **Create Event**: Fill form with event details
-3. **Upload Poster**: Select image (optional, max 5MB)
-4. **Submit**: Wait for faculty approval
-5. **View Registrations**: See who registered for your event
+- Passwords hashed by Supabase Auth (bcrypt)
+- Session tokens managed securely
+- SQL injection prevention (parameterized queries)
+- File upload validation (type and size limits)
+- CORS configuration for storage bucket
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Issue: "Failed to load events"
-- ✅ Check Supabase URL and anon key in `js/supabase.js`
-- ✅ Verify RLS policies are enabled
-- ✅ Check browser console for errors
+### Events not loading
+- Verify Supabase URL and anon key in `js/supabase.js`
+- Check browser console for specific errors
+- Ensure RLS policies were applied successfully
+- Confirm migration script (`fix_columns.sql`) was run
 
-### Issue: "Registration failed"
-- ✅ Ensure you're logged in as a student
-- ✅ Check if event is full
-- ✅ Verify you're not already registered
+### Registration fails
+- Verify you're logged in as a student
+- Check event capacity hasn't been reached
+- Ensure you haven't already registered for this event
 
-### Issue: "Upload failed"
-- ✅ Check file size (must be < 5MB)
-- ✅ Verify storage bucket `event-posters` exists
-- ✅ Ensure bucket is public
+### File upload fails
+- Verify storage bucket named `event-images` exists
+- Ensure bucket is marked as **Public**
+- Check file size (must be under 5MB)
+- Verify file is an image format
 
-### Issue: CORS errors
-- ✅ Add your local dev server to allowed origins in Supabase Storage settings
-- ✅ Or use a simple HTTP server instead of opening HTML directly
+### CORS errors
+- Don't open HTML files directly (file://)
+- Use a development server (Live Server, Python, or Node.js)
+- Verify storage bucket CORS settings in Supabase
+
+---
+
+## ⚠️ Known Limitations
+
+1. **No Email Verification**: Users can sign up without email confirmation (Supabase Auth can be configured to enable this)
+2. **Auto-Approval**: Events are automatically approved upon creation; no manual review workflow
+3. **Faculty Role**: Currently view-only; cannot approve/reject events
+4. **No Notifications**: No email or push notifications for event updates
+5. **Single Image Upload**: Events support only one poster image
+6. **No Event Editing**: Organizers cannot edit events after creation (only delete)
+
+---
+
+## 🎯 Planned Improvements
+
+These features are **not currently implemented** but are planned for future releases:
+
+- [ ] Manual event approval workflow by faculty
+- [ ] Event editing capabilities for organizers
+- [ ] Email notifications for event approvals and registrations
+- [ ] QR code generation for event check-in
+- [ ] Calendar view for events
+- [ ] Advanced search with date range filters
+- [ ] Export registration lists to CSV
+- [ ] Event analytics dashboard for organizers
+- [ ] Email verification for new accounts
 
 ---
 
 ## 🚀 Deployment
 
-### Deployed in vercel
+This project is configured for deployment on **Vercel**.
+
+### Deploy to Vercel
+
+1. Push your code to GitHub
+2. Import repository in Vercel dashboard
+3. Vercel will automatically detect `vercel.json` configuration
+4. Deploy
+5. Update Supabase credentials in deployed code (use environment variables in production)
+
+**Important:** Never commit your actual Supabase credentials. Use environment variables for production deployments.
 
 ---
 
-## 📈 Future Enhancements
+## 📝 Database Schema Reference
 
-- [ ] Email notifications for event approvals
-- [ ] QR code generation for event tickets
-- [ ] Event calendar view
-- [ ] Advanced search with date range
-- [ ] Export registration list to CSV
-- [ ] Event analytics dashboard
-- [ ] Push notifications for upcoming events
-- [ ] Social sharing features
-- [ ] Dark mode toggle
-- [ ] Multi-language support
+### Tables
+
+**profiles**
+- `id` (UUID, FK to auth.users)
+- `full_name` (TEXT)
+- `role` (TEXT: student, organizer, faculty)
+- `created_at` (TIMESTAMPTZ)
+
+**events**
+- `id` (UUID, PK)
+- `title`, `description`, `venue`, `category` (TEXT)
+- `event_date` (DATE), `event_time` (TIME)
+- `poster_url` (TEXT)
+- `organizer_id` (UUID, FK to profiles)
+- `status` (TEXT: pending, approved, rejected)
+- `max_participants` (INT)
+- `created_at`, `updated_at` (TIMESTAMPTZ)
+
+**registrations**
+- `id` (UUID, PK)
+- `event_id` (UUID, FK to events)
+- `user_id` (UUID, FK to profiles)
+- `created_at` (TIMESTAMPTZ)
+- UNIQUE constraint on (event_id, user_id)
+
+### Key Functions
+
+**`register_student(p_event_id, p_user_id)`**
+- Atomically registers a student for an event
+- Checks capacity and prevents duplicate registrations
+- Decrements event capacity on successful registration
+- Returns registration ID or throws error
 
 ---
 
 ## 📄 License
 
-This project is open-source and available under the MIT License.
+MIT License - Open source and free to use
+
+---
+
+## 🤝 Contributing
+
+This is a portfolio/learning project. Feel free to fork and adapt for your own use cases.
 
 ---
 
 ## 👨‍💻 Developer
 
-Built with ❤️ for campus event management
+**Built by:** ANAMIKA120405  
+**Repository:** [github.com/ANAMIKA120405/CAMPUS-EVENT-MANAGEMENT-SYSTEM](https://github.com/ANAMIKA120405/CAMPUS-EVENT-MANAGEMENT-SYSTEM)
 
 ---
 
-## 📞 Support
-
-For issues or questions:
-1. Check the Troubleshooting section
-2. Review Supabase documentation
-3. Check browser console for errors
-4. Verify database schema and RLS policies
-
----
-
-**Happy Event Managing! 🎉**
+**Questions or Issues?** Check browser console for errors, review Supabase logs, and verify all setup steps were completed.
