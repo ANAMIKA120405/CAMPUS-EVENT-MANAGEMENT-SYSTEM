@@ -1,103 +1,82 @@
 # Campus Event Management System
 
-A full-stack web application for managing campus events, built with vanilla JavaScript and Supabase backend. Features role-based access control, dynamic event registration with capacity management, and file upload capabilities.
+A full-stack web application for managing campus events, built using HTML, CSS, JavaScript, and Supabase. The system allows organizers to create events, students to register for them, and faculty to monitor event activity.
 
-**Deployment Status:** Configured for Vercel deployment
+## Features
 
----
+### For Students
 
-## 📋 Project Overview
+- **Browse Events**: View approved campus events with details such as date, venue, and description.
+- **Event Registration**: Register for events with automatic capacity checks.
+- **My Registrations**: View and cancel registered events.
 
-This system enables students to discover and register for campus events, organizers to create and manage events, and faculty to monitor event activities. Built without frameworks, using modern web standards and Supabase as the backend infrastructure.
+### For Event Organizers
 
----
+- **Event Creation**: Create events with title, description, date, time, venue, and capacity.
+- **Poster Upload**: Upload event posters using Supabase Storage.
+- **Registration View**: View the list of students registered for each event.
 
-## ✨ Core Features
+### For Faculty
 
-- **User Authentication**: Email/password authentication with three distinct user roles
-- **Event Browsing**: Public homepage displays approved events with search and category filtering
-- **Event Registration**: Students can register for events with automatic capacity management
-- **Event Creation**: Organizers can create events with details and poster images
-- **Event Monitoring**: Faculty can view all events and registration statistics
-- **File Upload**: Event poster upload to Supabase Storage (max 5MB)
-- **Security**: Row-Level Security (RLS) policies protect all database operations
+- **Event Monitoring**: View all events across the system.
+- **Registration Overview**: Monitor event participation and registrations.
 
----
+### General
 
-## 👥 User Roles & Permissions
+- **Role-Based Access**: Separate dashboards for students, organizers, and faculty.
+- **Capacity Management**: Prevents overbooking of events.
+- **Secure Authentication**: Uses Supabase Auth and Row-Level Security (RLS).
+- **Responsive Design**: Works on desktop and mobile devices.
 
-### Student
-- ✅ Browse and search approved events
-- ✅ Register for events (prevents duplicates, enforces capacity)
-- ✅ View personal registration history
-- ✅ Cancel event registrations
-- ❌ Cannot create events
+## Tech Stack
 
-### Event Organizer
-- ✅ Create events with title, description, venue, date, time, capacity
-- ✅ Upload event posters (images up to 5MB)
-- ✅ View all events they created
-- ✅ View registration lists for their events
-- ✅ Delete their own events
-- ❌ Cannot register for events
+- **Frontend**: HTML, CSS, JavaScript
+- **Backend**: Supabase (PostgreSQL, Auth, Storage)
+- **Authentication**: Supabase Auth
+- **Security**: Row-Level Security (RLS)
+- **Deployment**: Vercel
 
-### Faculty Coordinator
-- ✅ View all events across the system
-- ✅ Monitor registration statistics
-- ✅ Access event and registration data for auditing
-- ❌ Cannot create or register for events
+## Folder Structure
 
-> **Note:** Events are **automatically approved** upon creation. Faculty role is currently informational/monitoring only.
-
----
-
-## 🛠️ Technology Stack
-
-### Frontend
-- HTML5 (semantic markup)
-- CSS3 (responsive design with CSS variables, Grid, Flexbox)
-- JavaScript ES6+ (modular code with ES modules)
-- Supabase JS Client v2 (via CDN)
-
-### Backend
-- **Supabase PostgreSQL** - Database with Row-Level Security
-- **Supabase Auth** - User authentication and session management
-- **Supabase Storage** - File storage for event posters
-
-### Deployment
-- **Vercel** - Deployment-ready configuration for static hosting
-
----
-
-## 🚀 Setup Instructions
-
-### Prerequisites
-
-- Modern web browser (Chrome, Firefox, Safari, Edge)
-- [Supabase account](https://supabase.com) (free tier)
-- **One of the following** for local development:
-  - VS Code with Live Server extension
-  - Python 3.x (`python -m http.server`)
-  - Node.js (`npx http-server`)
-- Git (for cloning the repository)
-
----
-
-### Step 1: Clone the Repository
-
-```bash
-git clone https://github.com/ANAMIKA120405/CAMPUS-EVENT-MANAGEMENT-SYSTEM.git
-cd CAMPUS-EVENT-MANAGEMENT-SYSTEM
+```
+CAMPUS-EVENT-MANAGEMENT-SYSTEM/
+├── index.html
+├── login.html
+├── signup.html
+├── student-dashboard.html
+├── organizer-dashboard.html
+├── faculty-dashboard.html
+├── styles/
+├── js/
+├── database/
+└── vercel.json
 ```
 
----
+## Known Limitations
 
-### Step 2: Create Supabase Project
+- Events are automatically approved upon creation.
+- Faculty role is read-only.
+- No email notifications.
+- Events cannot be edited after creation.
 
-1. Go to [https://supabase.com](https://supabase.com)
-2. Create a new project
-3. Wait for database initialization (2-3 minutes)
-4. Note your **Project URL** and **anon public key** from **Settings > API**
+## Project Collaboration
+
+This project was developed as a collaborative effort.
+
+**My contributions include:**
+
+- Implementing authentication and role-based access
+- Developing event creation and registration workflows
+- Integrating Supabase for database operations and security
+
+## License
+
+MIT License
+
+## Credits
+
+Built by Anamika with collaborators.
+Powered by Supabase and modern web technologies.
 
 ---
 
@@ -151,8 +130,8 @@ cd CAMPUS-EVENT-MANAGEMENT-SYSTEM
 2. Update these two constants with your Supabase credentials:
 
 ```javascript
-const SUPABASE_URL = 'https://your-project-id.supabase.co';
-const SUPABASE_ANON_KEY = 'your-anon-public-key-here';
+const SUPABASE_URL = 'https://klrfbrydsfjcvrdzyeyd.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtscmZicnlkc2ZqY3ZyZHp5ZXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxODk1MzksImV4cCI6MjA3ODc2NTUzOX0.tT3dTv5uMtObZDS7WnE5t-V2bJ46sXT8dJuN4Jul9IY';
 ```
 
 **Where to find these:**
