@@ -16,7 +16,7 @@ import { supabase } from './supabase.js';
  * @param {string} role - User's role (student, organizer, faculty)
  */
 export async function handleSignup(name, email, password, role) {
-    // Sign up the user with Supabase Auth and metadata
+    // Sign up the user with Supabase Auth
     const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
@@ -34,9 +34,22 @@ export async function handleSignup(name, email, password, role) {
         throw new Error('Signup failed. Please try again.');
     }
 
-    // Profile will be automatically created by the trigger function
-    // Step 3: Show success message and redirect to login
-    alert('Account created successfully! Please login to continue.');
+    // Create profile in the profiles table
+    const { error: profileError } = await supabase
+        .from('profiles')
+        .insert({
+            id: authData.user.id,
+            name: name,
+            role: role
+        });
+
+    if (profileError) {
+        console.error('Profile creation error:', profileError);
+        throw new Error('Failed to create user profile.');
+    }
+
+    // Show success message and redirect to login
+    alert('Account created successfully! Please check your email to confirm your account, then login.');
     window.location.href = 'login.html';
 }
 
@@ -63,7 +76,7 @@ export async function handleLogin(email, password) {
     // Step 2: Get user's profile to determine role
     const { data: profile, error: profileError } = await supabase
         .from('profiles')
-        .select('role, full_name')
+        .select('role, name')
         .eq('id', data.user.id)
         .single();
 
@@ -111,7 +124,7 @@ export async function checkAuthState() {
             // User is logged in
             const { data: profile } = await supabase
                 .from('profiles')
-                .select('role, full_name')
+                .select('role, name')
                 .eq('id', session.user.id)
                 .single();
 
@@ -131,7 +144,7 @@ export async function checkAuthState() {
             // Update user name if element exists
             const userNameEl = document.getElementById('userName');
             if (userNameEl && profile) {
-                userNameEl.textContent = profile.full_name;
+                userNameEl.textContent = profile.name;
             }
 
         } else {

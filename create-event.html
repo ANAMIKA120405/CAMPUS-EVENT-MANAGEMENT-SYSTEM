@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event - Campus Events</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/components.css">
+    <style>
+        /* Create Event Page Specific Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #eef2ff 0%, #f8f9ff 100%);
+            min-height: 100vh;
+        }
+
+        /* Fixed Navbar */
+        .dashboard-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .dashboard-navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            width: auto;
+        }
+
+        .navbar-brand h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1B3358;
+        }
+
+        .navbar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .back-btn,
+        .logout-btn {
+            padding: 0.6rem 1.5rem;
+            border: 2px solid #1B3358;
+            background: transparent;
+            color: #1B3358;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover,
+        .logout-btn:hover {
+            background: #1B3358;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(27, 51, 88, 0.2);
+        }
+
+        /* Main Content */
+        .create-event-main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 6rem 2rem 3rem 2rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1B3358;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        /* Form Sections */
+        .form-section {
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .form-section:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1B3358;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-label .required {
+            color: #ef4444;
+            margin-left: 2px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.25s ease;
+            background-color: #ffffff;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #1B3358;
+            box-shadow: 0 0 0 3px rgba(27, 51, 88, 0.1);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: #94a3b8;
+        }
+
+        .form-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.6;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Poster Upload Section */
+        .poster-upload {
+            margin-bottom: 20px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .form-file {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px dashed #d1d5db;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background-color: #f8fafc;
+        }
+
+        .form-file:hover {
+            border-color: #1B3358;
+            background-color: #eef2ff;
+        }
+
+        .poster-preview-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .poster-preview-container.show {
+            display: block;
+        }
+
+        .poster-preview {
+            width: 100%;
+            height: 220px;
+            border-radius: 16px;
+            background: #f3f3f3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid #e5e7eb;
+        }
+
+        .poster-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .preview-placeholder {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Submit Button */
+        .submit-section {
+            margin-top: 20px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #0F1E3F, #1B3358);
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #1B3358, #2d3f54);
+            box-shadow: 0 8px 20px rgba(27, 51, 88, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Messages */
+        .error-message,
+        .success-message {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            display: none;
+        }
+
+        .error-message {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .success-message {
+            background-color: #d1fae5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+        }
+
+        .error-message.show,
+        .success-message.show {
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-navbar {
+                padding: 1rem 1.5rem;
+            }
+
+            .navbar-brand h2 {
+                font-size: 1rem;
+            }
+
+            .back-btn,
+            .logout-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .create-event-main {
+                padding: 5rem 1.5rem 2rem 1.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-section {
+                padding: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .section-title {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand h2 {
+                display: none;
+            }
+
+            .navbar-actions {
+                gap: 0.5rem;
+            }
+
+            .back-btn span {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Navbar -->
+    <nav class="dashboard-navbar">
+        <div class="dashboard-navbar-container">
+            <div class="navbar-brand">
+                <img src="/assets/images/jain-logo.png" alt="Campus Events Logo">
+                <h2>Create Event</h2>
+            </div>
+            <div class="navbar-actions">
+                <a href="organizer-dashboard.html" class="back-btn">
+                    ← <span>Back to Dashboard</span>
+                </a>
+                <button id="logoutBtn" class="logout-btn">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="create-event-main">
+        <!-- Page Header -->
+        <section class="page-header">
+            <h1>Create New Event</h1>
+            <p>Fill in the details below to publish a new event.</p>
+        </section>
+
+        <!-- Form Messages -->
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+
+        <!-- Event Creation Form -->
+        <form id="createEventForm">
+            <!-- Section 1: Event Basics -->
+            <section class="form-section">
+                <h2 class="section-title">
+                    <span class="section-icon">📋</span>
+                    Event Basics
+                </h2>
+
+                <div class="form-group">
+                    <label class="form-label" for="eventTitle">
+                        Event Title<span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="eventTitle" 
+                        name="eventTitle" 
+                        class="form-input" 
+                        placeholder="e.g., Tech Fest 2025" 
+                        required
+                    >
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="category">
+                            Category<span class="required">*</span>
+                        </label>
+                        <select id="category" name="category" class="form-select" required>
+                            <option value="">Select category...</option>
+                            <option value="technical">Technical</option>
+                            <option value="cultural">Cultural</option>
+                            <option value="sports">Sports</option>
+                            <option value="workshop">Workshop</option>
+                            <option value="seminar">Seminar</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="maxParticipants">
+                            Max Participants<span class="required">*</span>
+                        </label>
+                        <input 
+                            type="number" 
+                            id="maxParticipants" 
+                            name="maxParticipants" 
+                            class="form-input" 
+                            placeholder="e.g., 100" 
+                            min="1"
+                            required
+                        >
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Event Details -->
+            <section class="form-section">
+                <h2 class="section-title">
+                    <span class="section-icon">📅</span>
+                    Event Details
+                </h2>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="eventDate">
+                            Event Date<span class="required">*</span>
+                        </label>
+                        <input 
+                            type="date" 
+                            id="eventDate" 
+                            name="eventDate" 
+                            class="form-input" 
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="eventTime">
+                            Event Time<span class="required">*</span>
+                        </label>
+                        <input 
+                            type="time" 
+                            id="eventTime" 
+                            name="eventTime" 
+                            class="form-input" 
+                            required
+                        >
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="venue">
+                        Venue<span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="venue" 
+                        name="venue" 
+                        class="form-input" 
+                        placeholder="e.g., Main Auditorium, Block A" 
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="description">
+                        Description<span class="required">*</span>
+                    </label>
+                    <textarea 
+                        id="description" 
+                        name="description" 
+                        class="form-textarea" 
+                        placeholder="Provide a detailed description of the event..."
+                        required
+                    ></textarea>
+                </div>
+            </section>
+
+            <!-- Section 3: Event Poster Upload -->
+            <section class="form-section">
+                <h2 class="section-title">
+                    <span class="section-icon">🖼️</span>
+                    Event Poster
+                </h2>
+
+                <div class="poster-upload">
+                    <label class="form-label" for="eventPoster">
+                        Upload Poster Image
+                    </label>
+                    <input 
+                        type="file" 
+                        id="eventPoster" 
+                        name="eventPoster" 
+                        class="form-file" 
+                        accept="image/*"
+                        onchange="previewPoster(event)"
+                    >
+                    <small style="color: #64748b; font-size: 0.85rem; display: block; margin-top: 8px;">
+                        Accepted formats: JPG, PNG (Max size: 5MB)
+                    </small>
+                </div>
+
+                <div id="posterPreviewContainer" class="poster-preview-container">
+                    <div class="poster-preview" id="posterPreview">
+                        <div class="preview-placeholder">
+                            Preview will appear here
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Submit Button -->
+            <section class="submit-section">
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span>✨</span>
+                    Create Event
+                </button>
+            </section>
+        </form>
+    </main>
+
+    <!-- Scripts -->
+    <script>
+        // Preview poster image
+        function previewPoster(event) {
+            const file = event.target.files[0];
+            const previewContainer = document.getElementById('posterPreviewContainer');
+            const preview = document.getElementById('posterPreview');
+            
+            if (file) {
+                // Check file size (5MB limit)
+                if (file.size > 5 * 1024 * 1024) {
+                    showError('File size must be less than 5MB');
+                    event.target.value = '';
+                    return;
+                }
+
+                // Check file type
+                if (!file.type.startsWith('image/')) {
+                    showError('Please select a valid image file');
+                    event.target.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Event Poster Preview">`;
+                    previewContainer.classList.add('show');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.innerHTML = '<div class="preview-placeholder">Preview will appear here</div>';
+                previewContainer.classList.remove('show');
+            }
+        }
+
+        // Validate form
+        function validateForm() {
+            const title = document.getElementById('eventTitle').value.trim();
+            const category = document.getElementById('category').value;
+            const maxParticipants = document.getElementById('maxParticipants').value;
+            const eventDate = document.getElementById('eventDate').value;
+            const eventTime = document.getElementById('eventTime').value;
+            const venue = document.getElementById('venue').value.trim();
+            const description = document.getElementById('description').value.trim();
+
+            if (!title || !category || !maxParticipants || !eventDate || !eventTime || !venue || !description) {
+                showError('Please fill in all required fields');
+                return false;
+            }
+
+            if (parseInt(maxParticipants) < 1) {
+                showError('Max participants must be at least 1');
+                return false;
+            }
+
+            // Check if date is in the future
+            const selectedDate = new Date(eventDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (selectedDate < today) {
+                showError('Event date must be in the future');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Handle create event
+        async function handleCreateEvent(event) {
+            event.preventDefault();
+            
+            // Clear previous messages
+            clearMessages();
+
+            // Validate form
+            if (!validateForm()) {
+                return;
+            }
+
+            // Disable submit button
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>⏳</span> Creating Event...';
+
+            try {
+                // Get form data
+                const formData = {
+                    title: document.getElementById('eventTitle').value.trim(),
+                    category: document.getElementById('category').value,
+                    capacity: parseInt(document.getElementById('maxParticipants').value),
+                    event_date: document.getElementById('eventDate').value,
+                    event_time: document.getElementById('eventTime').value,
+                    venue: document.getElementById('venue').value.trim(),
+                    description: document.getElementById('description').value.trim(),
+                };
+
+                console.log('Event data to submit:', formData);
+
+                // Get current user
+                const { supabase } = await import('./js/supabase.js');
+                const { getCurrentUser } = await import('./js/auth.js');
+                
+                const currentUser = await getCurrentUser();
+                if (!currentUser) {
+                    showError('You must be logged in to create an event');
+                    return;
+                }
+
+                // Add organizer ID
+                formData.organizer_id = currentUser.id;
+                formData.status = 'pending'; // Events start as pending
+
+                // Handle poster upload if provided
+                const posterFile = document.getElementById('eventPoster').files[0];
+                if (posterFile) {
+                    const { uploadFile } = await import('./js/supabase.js');
+                    try {
+                        const filePath = await uploadFile(posterFile, 'posters');
+                        formData.poster_url = filePath;
+                    } catch (uploadError) {
+                        console.error('Poster upload error:', uploadError);
+                        showError('Failed to upload poster. Please try again.');
+                        return;
+                    }
+                }
+
+                // Insert event into database
+                const { data, error } = await supabase
+                    .from('events')
+                    .insert([formData])
+                    .select();
+
+                if (error) {
+                    console.error('Database error:', error);
+                    showError('Failed to create event: ' + error.message);
+                    return;
+                }
+
+                console.log('Event created:', data);
+
+                // Show success message
+                showSuccess('Event created successfully! Redirecting to dashboard...');
+
+                // Reset form
+                document.getElementById('createEventForm').reset();
+                document.getElementById('posterPreviewContainer').classList.remove('show');
+
+                // Redirect to dashboard after 2 seconds
+                setTimeout(() => {
+                    window.location.href = 'organizer-dashboard.html';
+                }, 2000);
+
+            } catch (error) {
+                console.error('Error creating event:', error);
+                showError('Failed to create event. Please try again.');
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>✨</span> Create Event';
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorEl = document.getElementById('errorMessage');
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+            errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successEl = document.getElementById('successMessage');
+            successEl.textContent = message;
+            successEl.classList.add('show');
+            successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Clear messages
+        function clearMessages() {
+            document.getElementById('errorMessage').classList.remove('show');
+            document.getElementById('successMessage').classList.remove('show');
+        }
+
+        // Attach event listeners
+        document.getElementById('createEventForm').addEventListener('submit', handleCreateEvent);
+
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            console.log('Logout clicked');
+            // TODO: Implement logout functionality
+            // window.location.href = 'login.html';
+        });
+
+        // Set minimum date to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('eventDate').setAttribute('min', today);
+    </script>
+</body>
+</html>

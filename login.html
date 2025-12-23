@@ -6,6 +6,208 @@
     <title>Login - Campus Event Management</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/components.css">
+    <style>
+        /* Login Page Specific Styles */
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #eef2ff 0%, #f8f9ff 100%);
+            padding: 2rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle background pattern */
+        .login-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(27, 51, 88, 0.03) 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1B3358;
+            margin: 0 0 0.5rem 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .login-header p {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .login-card {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transition: all 0.3s ease;
+        }
+
+        .login-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .login-form {
+            width: 100%;
+        }
+
+        .form-field {
+            margin-bottom: 16px;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 6px;
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-field input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.25s ease;
+            background-color: #ffffff;
+            box-sizing: border-box;
+        }
+
+        .form-field input:focus {
+            outline: none;
+            border-color: #1B3358;
+            box-shadow: 0 0 0 3px rgba(27, 51, 88, 0.1);
+        }
+
+        .form-field input::placeholder {
+            color: #94a3b8;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #0F1E3F, #1B3358);
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-top: 8px;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #1B3358, #2d3f54);
+            box-shadow: 0 8px 20px rgba(27, 51, 88, 0.3);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .login-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .login-footer p {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .login-footer a {
+            color: #1B3358;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .login-footer a:hover {
+            color: #0F1E3F;
+            text-decoration: underline;
+        }
+
+        .error-message,
+        .success-message {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .error-message {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .success-message {
+            background-color: #d1fae5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            .login-card {
+                padding: 24px;
+                border-radius: 16px;
+            }
+
+            .login-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .form-field input {
+                padding: 10px 14px;
+                font-size: 0.9rem;
+            }
+
+            .login-button {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -23,51 +225,52 @@
         </div>
     </nav>
 
-    <!-- Login Form Section -->
-    <section class="auth-section">
-        <div class="container">
-            <div class="auth-container">
-                <div class="auth-card">
-                    <h2>Welcome Back</h2>
-                    <p class="auth-subtitle">Login to manage your campus events</p>
-                    
-                    <form id="loginForm" class="auth-form">
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" required 
-                                   placeholder="your.email@university.edu"
-                                   class="form-input">
-                        </div>
+    <!-- Login Section -->
+    <div class="login-wrapper">
+        <div class="login-container">
+            <div class="login-header">
+                <h2>Welcome Back</h2>
+                <p>Login to manage your campus events</p>
+            </div>
 
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" id="password" name="password" required 
-                                   placeholder="Enter your password"
-                                   class="form-input">
-                        </div>
+            <div class="login-card">
+                <form id="loginForm" class="login-form">
+                    <div id="errorMessage" class="error-message" style="display: none;"></div>
+                    <div id="successMessage" class="success-message" style="display: none;"></div>
 
-                        <div id="errorMessage" class="error-message" style="display: none;"></div>
-                        <div id="successMessage" class="success-message" style="display: none;"></div>
-
-                        <button type="submit" class="btn btn-primary btn-block" id="loginBtn">
-                            Login
-                        </button>
-                    </form>
-
-                    <div class="auth-footer">
-                        <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
+                    <div class="form-field">
+                        <label for="email">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            placeholder="your.email@university.edu" 
+                            required
+                        >
                     </div>
+
+                    <div class="form-field">
+                        <label for="password">Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="Enter your password" 
+                            required
+                        >
+                    </div>
+
+                    <button type="submit" class="login-button" id="loginBtn">
+                        Login
+                    </button>
+                </form>
+
+                <div class="login-footer">
+                    <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Campus Event Management System. All rights reserved.</p>
-        </div>
-    </footer>
+    </div>
 
     <!-- Scripts -->
     <script type="module">
@@ -78,7 +281,7 @@
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const loginBtn = document.getElementById('loginBtn');
             const errorMessage = document.getElementById('errorMessage');

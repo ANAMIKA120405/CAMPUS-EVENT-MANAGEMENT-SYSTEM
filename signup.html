@@ -6,6 +6,240 @@
     <title>Sign Up - Campus Event Management</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/components.css">
+    <style>
+        /* Signup Page Specific Styles */
+        .signup-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #eef2ff 0%, #f8f9ff 100%);
+            padding: 2rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Subtle background pattern */
+        .signup-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(27, 51, 88, 0.03) 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .signup-container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .signup-header h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1B3358;
+            margin: 0 0 0.5rem 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .signup-header p {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .signup-card {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transition: all 0.3s ease;
+        }
+
+        .signup-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .signup-form {
+            width: 100%;
+        }
+
+        .form-field {
+            margin-bottom: 16px;
+        }
+
+        .form-field label {
+            display: block;
+            margin-bottom: 6px;
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-field input,
+        .form-field select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.25s ease;
+            background-color: #ffffff;
+            box-sizing: border-box;
+        }
+
+        .form-field input:focus,
+        .form-field select:focus {
+            outline: none;
+            border-color: #1B3358;
+            box-shadow: 0 0 0 3px rgba(27, 51, 88, 0.1);
+        }
+
+        .form-field input::placeholder {
+            color: #94a3b8;
+        }
+
+        .form-field select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        .conditional-field {
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .conditional-field.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .signup-button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #0F1E3F, #1B3358);
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            margin-top: 8px;
+        }
+
+        .signup-button:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(135deg, #1B3358, #2d3f54);
+            box-shadow: 0 8px 20px rgba(27, 51, 88, 0.3);
+        }
+
+        .signup-button:active {
+            transform: translateY(0);
+        }
+
+        .signup-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .signup-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .signup-footer p {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .signup-footer a {
+            color: #1B3358;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .signup-footer a:hover {
+            color: #0F1E3F;
+            text-decoration: underline;
+        }
+
+        .error-message,
+        .success-message {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .error-message {
+            background-color: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .success-message {
+            background-color: #d1fae5;
+            color: #059669;
+            border: 1px solid #a7f3d0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 640px) {
+            .signup-card {
+                padding: 24px;
+                border-radius: 16px;
+            }
+
+            .signup-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .form-field input,
+            .form-field select {
+                padding: 10px 14px;
+                font-size: 0.9rem;
+            }
+
+            .signup-button {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -23,91 +257,148 @@
         </div>
     </nav>
 
-    <!-- Signup Form Section -->
-    <section class="auth-section">
-        <div class="container">
-            <div class="auth-container">
-                <div class="auth-card">
-                    <h2>Create Account</h2>
-                    <p class="auth-subtitle">Join our campus event community</p>
-                    
-                    <form id="signupForm" class="auth-form">
-                        <div class="form-group">
-                            <label for="name">Full Name</label>
-                            <input type="text" id="name" name="name" required 
-                                   placeholder="Enter your full name"
-                                   class="form-input">
-                        </div>
+    <!-- Signup Section -->
+    <div class="signup-wrapper">
+        <div class="signup-container">
+            <div class="signup-header">
+                <h2>Campus Events Signup</h2>
+                <p>Create your account to get started</p>
+            </div>
 
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" required 
-                                   placeholder="your.email@university.edu"
-                                   class="form-input">
-                        </div>
+            <div class="signup-card">
+                <form id="signupForm" class="signup-form">
+                    <div id="errorMessage" class="error-message" style="display: none;"></div>
+                    <div id="successMessage" class="success-message" style="display: none;"></div>
 
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" id="password" name="password" required 
-                                   placeholder="Create a strong password (min 6 characters)"
-                                   minlength="6"
-                                   class="form-input">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="confirmPassword">Confirm Password</label>
-                            <input type="password" id="confirmPassword" name="confirmPassword" required 
-                                   placeholder="Re-enter your password"
-                                   class="form-input">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="role">Select Your Role</label>
-                            <select id="role" name="role" required class="form-select">
-                                <option value="">Choose your role...</option>
-                                <option value="student">Student</option>
-                                <option value="organizer">Event Organizer</option>
-                            </select>
-                            <small class="form-hint">Faculty accounts are created by administrators</small>
-                        </div>
-
-                        <div id="errorMessage" class="error-message" style="display: none;"></div>
-                        <div id="successMessage" class="success-message" style="display: none;"></div>
-
-                        <button type="submit" class="btn btn-primary btn-block" id="signupBtn">
-                            Create Account
-                        </button>
-                    </form>
-
-                    <div class="auth-footer">
-                        <p>Already have an account? <a href="login.html">Login here</a></p>
+                    <div class="form-field">
+                        <label for="fullName">Full Name</label>
+                        <input 
+                            type="text" 
+                            id="fullName" 
+                            name="fullName" 
+                            placeholder="John Doe" 
+                            required
+                        >
                     </div>
+
+                    <div class="form-field">
+                        <label for="email">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            placeholder="your.email@university.edu" 
+                            required
+                        >
+                    </div>
+
+                    <div class="form-field">
+                        <label for="password">Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="Create a strong password" 
+                            required
+                            minlength="6"
+                        >
+                    </div>
+
+                    <div class="form-field">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            name="confirmPassword" 
+                            placeholder="Re-enter your password" 
+                            required
+                            minlength="6"
+                        >
+                    </div>
+
+                    <div class="form-field">
+                        <label for="role">Select Role</label>
+                        <select id="role" name="role" required>
+                            <option value="">Choose your role...</option>
+                            <option value="student">Student</option>
+                            <option value="organizer">Organizer</option>
+                            <option value="faculty">Faculty</option>
+                        </select>
+                    </div>
+
+                    <!-- Conditional Fields -->
+                    <div id="departmentField" class="form-field conditional-field">
+                        <label for="department">Department</label>
+                        <input 
+                            type="text" 
+                            id="department" 
+                            name="department" 
+                            placeholder="e.g., Computer Science"
+                        >
+                    </div>
+
+                    <div id="yearField" class="form-field conditional-field">
+                        <label for="year">Year of Study</label>
+                        <select id="year" name="year">
+                            <option value="">Select year...</option>
+                            <option value="1">1st Year</option>
+                            <option value="2">2nd Year</option>
+                            <option value="3">3rd Year</option>
+                            <option value="4">4th Year</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="signup-button" id="signupBtn">
+                        Create Account
+                    </button>
+                </form>
+
+                <div class="signup-footer">
+                    <p>Already have an account? <a href="login.html">Login</a></p>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Campus Event Management System. All rights reserved.</p>
-        </div>
-    </footer>
+    </div>
 
     <!-- Scripts -->
-    <script type="module">
-        import { supabase } from './js/supabase.js?v=4';
-        import { handleSignup } from './js/auth.js?v=4';
+    <script>
+        // Role-based field visibility
+        const roleSelect = document.getElementById('role');
+        const departmentField = document.getElementById('departmentField');
+        const yearField = document.getElementById('yearField');
+        const departmentInput = document.getElementById('department');
+        const yearInput = document.getElementById('year');
 
-        // Handle form submission
+        roleSelect.addEventListener('change', function() {
+            const selectedRole = this.value;
+            
+            // Hide all conditional fields first
+            departmentField.classList.remove('show');
+            yearField.classList.remove('show');
+            departmentInput.removeAttribute('required');
+            yearInput.removeAttribute('required');
+
+            // Show relevant fields based on role
+            if (selectedRole === 'organizer' || selectedRole === 'faculty') {
+                departmentField.classList.add('show');
+                departmentInput.setAttribute('required', 'required');
+            } else if (selectedRole === 'student') {
+                yearField.classList.add('show');
+                yearInput.setAttribute('required', 'required');
+            }
+        });
+
+        // Form submission
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const name = document.getElementById('name').value.trim();
+            const fullName = document.getElementById('fullName').value.trim();
             const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
             const role = document.getElementById('role').value;
+            const department = document.getElementById('department').value.trim();
+            const year = document.getElementById('year').value;
             
             const signupBtn = document.getElementById('signupBtn');
             const errorMessage = document.getElementById('errorMessage');
@@ -130,21 +421,65 @@
                 return;
             }
 
-            if (!role) {
-                errorMessage.textContent = 'Please select your role!';
-                errorMessage.style.display = 'block';
-                return;
-            }
-
             // Disable button and show loading state
             signupBtn.disabled = true;
-            signupBtn.textContent = 'Creating account...';
+            signupBtn.textContent = 'Creating Account...';
 
             try {
-                await handleSignup(name, email, password, role);
+                // Import Supabase dynamically
+                const { supabase } = await import('./js/supabase.js?v=4');
+
+                // Sign up the user
+                const { data: authData, error: signUpError } = await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            full_name: fullName,
+                            role: role,
+                            department: (role === 'organizer' || role === 'faculty') ? department : null,
+                            year: (role === 'student') ? year : null
+                        }
+                    }
+                });
+
+                if (signUpError) throw signUpError;
+
+                if (authData.user) {
+                    // Create profile in the database
+                    const { error: profileError } = await supabase
+                        .from('profiles')
+                        .insert([{
+                            id: authData.user.id,
+                            email: email,
+                            full_name: fullName,
+                            role: role,
+                            department: (role === 'organizer' || role === 'faculty') ? department : null,
+                            year: (role === 'student') ? year : null
+                        }]);
+
+                    if (profileError) {
+                        console.error('Profile creation error:', profileError);
+                    }
+
+                    successMessage.textContent = 'Account created successfully! Please check your email to verify your account.';
+                    successMessage.style.display = 'block';
+                    
+                    // Reset form
+                    document.getElementById('signupForm').reset();
+                    departmentField.classList.remove('show');
+                    yearField.classList.remove('show');
+
+                    // Redirect to login after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 3000);
+                }
             } catch (error) {
-                errorMessage.textContent = error.message;
+                console.error('Signup error:', error);
+                errorMessage.textContent = error.message || 'An error occurred during signup. Please try again.';
                 errorMessage.style.display = 'block';
+            } finally {
                 signupBtn.disabled = false;
                 signupBtn.textContent = 'Create Account';
             }

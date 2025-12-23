@@ -3,42 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campus Event Management - Home</title>
+    <title>Campus Event Management System - Home</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/components.css">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand">
-                <img src="/assets/images/jain-logo.png" alt="Jain University Logo" class="brand-logo">
-                <h2>Campus Events</h2>
+    <!-- Header with Navigation -->
+    <header class="site-header">
+        <nav class="navbar">
+            <div class="navbar-container">
+                <div class="navbar-brand">
+                    <img src="assets/images/jain-logo.png" alt="Campus Events Logo" class="logo">
+                    <span class="brand-name">Campus Events</span>
+                </div>
+                <button class="navbar-toggle" aria-label="Toggle navigation">
+                    <span class="toggle-bar"></span>
+                    <span class="toggle-bar"></span>
+                    <span class="toggle-bar"></span>
+                </button>
+                <ul class="navbar-menu">
+                    <li class="menu-item"><a href="index.html" class="menu-link active">Home</a></li>
+                    <li class="menu-item"><a href="#events" class="menu-link">Events</a></li>
+                    <li class="menu-item"><a href="login.html" class="menu-link">Login</a></li>
+                    <li class="menu-item"><a href="signup.html" class="menu-link btn-signup">Sign Up</a></li>
+                </ul>
             </div>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link active">Home</a>
-                <a href="#" id="dashboardLink" class="nav-link" style="display: none;">Dashboard</a>
-                <a href="login.html" id="loginLink" class="nav-link">Login</a>
-                <a href="signup.html" id="signupLink" class="nav-link">Sign Up</a>
-                <button id="logoutBtn" class="btn btn-secondary" style="display: none;">Logout</button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-overlay"></div>
+            <div class="hero-container">
+                <h1 class="hero-heading">Discover Campus Events</h1>
+                <p class="hero-subheading">Find and register for exciting events happening on campus</p>
             </div>
-        </div>
-    </nav>
+        </section>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>Discover Campus Events</h1>
-            <p>Find and register for exciting events happening on campus</p>
-        </div>
-    </section>
-
-    <!-- Search and Filter Section -->
-    <section class="search-section">
-        <div class="container">
+        <!-- Floating Search Bar -->
+        <section class="search-section">
             <div class="search-container">
-                <input type="text" id="searchInput" class="search-input" placeholder="Search events by title, venue, or description...">
-                <select id="categoryFilter" class="filter-select">
+                <input type="search" class="search-input" placeholder="Search events by title, venue, or description…" aria-label="Search events">
+                <select class="search-dropdown" aria-label="Category filter">
                     <option value="">All Categories</option>
                     <option value="technical">Technical</option>
                     <option value="cultural">Cultural</option>
@@ -47,75 +55,152 @@
                     <option value="seminar">Seminar</option>
                     <option value="other">Other</option>
                 </select>
-                <button id="searchBtn" class="btn btn-primary">Search</button>
+                <button class="search-button" type="button">Search</button>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Events Grid Section -->
-    <section class="events-section">
-        <div class="container">
-            <h2>Upcoming Events</h2>
-            <div id="eventsGrid" class="events-grid">
-                <!-- Event cards will be dynamically loaded here -->
-                <div class="loading-spinner">Loading events...</div>
-            </div>
-            <div id="noEventsMessage" class="no-events" style="display: none;">
-                <p>No events found matching your criteria.</p>
-            </div>
-        </div>
-    </section>
+        <!-- Upcoming Events Section -->
+        <section class="events-section">
+            <div class="events-container">
+                <h2 class="section-heading">Upcoming Events</h2>
+                <div class="events-grid">
+                    <!-- Event Card 1 -->
+                    <article class="event-card">
+                        <div class="event-image">
+                            <img src="https://via.placeholder.com/400x250/1B3358/ffffff?text=Event+Image" alt="Event image">
+                            <span class="event-category technical">Technical</span>
+                        </div>
+                        <div class="event-content">
+                            <h3 class="event-title">Web Development Workshop</h3>
+                            <div class="event-meta">
+                                <span class="event-date">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    Dec 25, 2025
+                                </span>
+                                <span class="event-venue">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    Main Auditorium
+                                </span>
+                            </div>
+                            <p class="event-description">Learn modern web development techniques with hands-on projects and expert guidance.</p>
+                        </div>
+                    </article>
 
-    <!-- Event Detail Modal -->
-    <div id="eventModal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <div id="modalBody">
-                <!-- Event details will be loaded here -->
+                    <!-- Event Card 2 -->
+                    <article class="event-card">
+                        <div class="event-image">
+                            <img src="https://via.placeholder.com/400x250/1B3358/ffffff?text=Event+Image" alt="Event image">
+                            <span class="event-category cultural">Cultural</span>
+                        </div>
+                        <div class="event-content">
+                            <h3 class="event-title">Annual Cultural Fest</h3>
+                            <div class="event-meta">
+                                <span class="event-date">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    Dec 28, 2025
+                                </span>
+                                <span class="event-venue">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    Campus Grounds
+                                </span>
+                            </div>
+                            <p class="event-description">Celebrate diversity and culture with performances, exhibitions, and traditional activities.</p>
+                        </div>
+                    </article>
+
+                    <!-- Event Card 3 -->
+                    <article class="event-card">
+                        <div class="event-image">
+                            <img src="https://via.placeholder.com/400x250/1B3358/ffffff?text=Event+Image" alt="Event image">
+                            <span class="event-category sports">Sports</span>
+                        </div>
+                        <div class="event-content">
+                            <h3 class="event-title">Inter-College Sports Meet</h3>
+                            <div class="event-meta">
+                                <span class="event-date">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    Jan 5, 2026
+                                </span>
+                                <span class="event-venue">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                        <circle cx="12" cy="10" r="3"></circle>
+                                    </svg>
+                                    Sports Complex
+                                </span>
+                            </div>
+                            <p class="event-description">Compete in various sports and showcase your athletic talents in this exciting tournament.</p>
+                        </div>
+                    </article>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Campus Event Management System. All rights reserved.</p>
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-social">
+                <a href="https://github.com" class="social-link" aria-label="GitHub" target="_blank" rel="noopener">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </a>
+                <a href="https://linkedin.com" class="social-link" aria-label="LinkedIn" target="_blank" rel="noopener">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                </a>
+            </div>
+            <p class="footer-text">&copy; 2024 Campus Event Management System. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script type="module" src="js/supabase.js?v=5"></script>
-    <script type="module" src="js/auth.js?v=5"></script>
-    <script type="module" src="js/events.js?v=5"></script>
-    <script type="module">
-        import { supabase } from './js/supabase.js?v=5';
-        import { checkAuthState } from './js/auth.js?v=5';
-        import { loadEvents, searchAndFilterEvents } from './js/events.js?v=5';
-
-        // Check authentication state on page load
-        checkAuthState();
-
-        // Load all approved events
-        loadEvents();
-
-        // Search and filter functionality
-        document.getElementById('searchBtn').addEventListener('click', () => {
-            const searchTerm = document.getElementById('searchInput').value;
-            const category = document.getElementById('categoryFilter').value;
-            searchAndFilterEvents(searchTerm, category);
-        });
-
-        // Real-time search on input
-        document.getElementById('searchInput').addEventListener('input', () => {
-            const searchTerm = document.getElementById('searchInput').value;
-            const category = document.getElementById('categoryFilter').value;
-            searchAndFilterEvents(searchTerm, category);
-        });
-
-        document.getElementById('categoryFilter').addEventListener('change', () => {
-            const searchTerm = document.getElementById('searchInput').value;
-            const category = document.getElementById('categoryFilter').value;
-            searchAndFilterEvents(searchTerm, category);
+    <!-- Mobile Menu Toggle Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navbarToggle = document.querySelector('.navbar-toggle');
+            const navbarMenu = document.querySelector('.navbar-menu');
+            
+            if (navbarToggle) {
+                navbarToggle.addEventListener('click', function() {
+                    navbarMenu.classList.toggle('active');
+                    
+                    // Animate toggle button
+                    this.classList.toggle('active');
+                });
+            }
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                const isClickInsideNav = event.target.closest('.navbar-container');
+                
+                if (!isClickInsideNav && navbarMenu.classList.contains('active')) {
+                    navbarMenu.classList.remove('active');
+                    navbarToggle.classList.remove('active');
+                }
+            });
         });
     </script>
 </body>

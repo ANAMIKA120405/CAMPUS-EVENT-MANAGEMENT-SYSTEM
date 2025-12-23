@@ -16,8 +16,8 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
 
-const SUPABASE_URL = 'https://klrfbrydsfjcvrdzyeyd.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtscmZicnlkc2ZqY3ZyZHp5ZXlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMxODk1MzksImV4cCI6MjA3ODc2NTUzOX0.tT3dTv5uMtObZDS7WnE5t-V2bJ46sXT8dJuN4Jul9IY';
+const SUPABASE_URL = 'https://gctsgkrkuaknyxleyucu.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdjdHNna3JrdWFrbnl4bGV5dWN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0NTk0NTQsImV4cCI6MjA4MjAzNTQ1NH0.PMbU64WQ7r743GgWl0uIiHkqGXlH9plXE_bR6F5Tk4E';
 
 // Create and export the Supabase client
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);

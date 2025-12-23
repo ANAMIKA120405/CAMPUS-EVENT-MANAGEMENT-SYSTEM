@@ -6,103 +6,1075 @@
     <title>Student Dashboard - Campus Events</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/components.css">
+    <style>
+        /* Student Dashboard Specific Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9ff;
+            min-height: 100vh;
+        }
+
+        /* Fixed Navbar */
+        .dashboard-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .dashboard-navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            width: auto;
+        }
+
+        .navbar-brand h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1B3358;
+        }
+
+        .navbar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .logout-btn {
+            padding: 0.6rem 1.5rem;
+            border: 2px solid #1B3358;
+            background: transparent;
+            color: #1B3358;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .logout-btn:hover {
+            background: #1B3358;
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(27, 51, 88, 0.2);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #eef2ff 0%, #f8f9ff 100%);
+            padding: 100px 20px 80px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(27, 51, 88, 0.03) 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1B3358;
+            margin-bottom: 1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* Search & Filter Section */
+        .search-filter-section {
+            max-width: 1400px;
+            margin: -50px auto 3rem auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 100;
+        }
+
+        .search-filter-card {
+            background: #ffffff;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .search-group {
+            flex: 2;
+            min-width: 250px;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .search-filter-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .search-input,
+        .filter-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.25s ease;
+            background-color: #ffffff;
+        }
+
+        .search-input:focus,
+        .filter-select:focus {
+            outline: none;
+            border-color: #1B3358;
+            box-shadow: 0 0 0 3px rgba(27, 51, 88, 0.1);
+        }
+
+        .filter-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 40px;
+        }
+
+        /* Events Grid Section */
+        .events-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 2rem 4rem 2rem;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1B3358;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .event-card {
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .event-poster {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #0F1E3F, #1B3358);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .event-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .event-content {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+        }
+
+        .event-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex: 1;
+        }
+
+        .event-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .event-meta-icon {
+            font-size: 1rem;
+        }
+
+        .event-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .event-category {
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #0F1E3F, #1B3358);
+            color: #ffffff;
+        }
+
+        .register-btn {
+            padding: 0.6rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #0F1E3F, #1B3358);
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(27, 51, 88, 0.3);
+        }
+
+        /* Event Details Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            animation: fadeIn 0.25s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .event-modal-card {
+            background: #ffffff;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            animation: slideUp 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-poster {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #0F1E3F, #1B3358);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 1.5rem;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-content {
+            padding: 2rem;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            color: #1e293b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .modal-close-btn:hover {
+            background: #ffffff;
+            transform: rotate(90deg);
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1B3358;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+        .modal-meta-icon {
+            font-size: 1.5rem;
+        }
+
+        .modal-meta-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-meta-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .modal-meta-value {
+            font-size: 0.95rem;
+            color: #1e293b;
+            font-weight: 500;
+        }
+
+        .modal-description {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-description h3 {
+            font-size: 1.1rem;
+            color: #1B3358;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .modal-description p {
+            color: #64748b;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .modal-info-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .modal-info-badge {
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-info-badge.category {
+            background: linear-gradient(135deg, #0F1E3F, #1B3358);
+            color: #ffffff;
+        }
+
+        .modal-info-badge.capacity {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .modal-info-badge.seats {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .modal-register-btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #0F1E3F, #1B3358);
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .modal-register-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(27, 51, 88, 0.3);
+        }
+
+        .modal-register-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5rem;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .events-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-navbar {
+                padding: 1rem 1.5rem;
+            }
+
+            .navbar-brand h2 {
+                font-size: 1rem;
+            }
+
+            .logout-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .search-filter-card {
+                padding: 1.5rem;
+            }
+
+            .search-group,
+            .filter-group {
+                flex: 1 1 100%;
+                min-width: 100%;
+            }
+
+            .events-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+            }
+
+            .modal-meta-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand h2 {
+                display: none;
+            }
+
+            .hero-section {
+                padding: 80px 20px 60px 20px;
+            }
+
+            .hero-title {
+                font-size: 1.75rem;
+            }
+
+            .search-filter-section {
+                margin: -40px auto 2rem auto;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand">
-                <img src="/assets/images/jain-logo.png" alt="Jain University Logo" class="brand-logo">
-                <h2>Campus Events</h2>
+    <!-- Fixed Navbar -->
+    <nav class="dashboard-navbar">
+        <div class="dashboard-navbar-container">
+            <div class="navbar-brand">
+                <img src="/assets/images/jain-logo.png" alt="Campus Events Logo">
+                <h2>Student Dashboard</h2>
             </div>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="student-dashboard.html" class="nav-link active">Dashboard</a>
-                <span class="user-name" id="userName"></span>
-                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            <div class="navbar-actions">
+                <button id="logoutBtn" class="logout-btn">Logout</button>
             </div>
         </div>
     </nav>
 
-    <!-- Dashboard Header -->
-    <section class="dashboard-header">
-        <div class="container">
-            <h1>Student Dashboard</h1>
-            <p>Manage your event registrations</p>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Explore Campus Events</h1>
+            <p class="hero-subtitle">Find, register, and participate in upcoming events</p>
         </div>
     </section>
 
-    <!-- Dashboard Content -->
-    <section class="dashboard-section">
-        <div class="container">
-            <!-- Stats Cards -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">📅</div>
-                    <div class="stat-info">
-                        <h3 id="totalRegistrations">0</h3>
-                        <p>Total Registrations</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">⏰</div>
-                    <div class="stat-info">
-                        <h3 id="upcomingEvents">0</h3>
-                        <p>Upcoming Events</p>
-                    </div>
-                </div>
+    <!-- Search & Filter Section -->
+    <section class="search-filter-section">
+        <div class="search-filter-card">
+            <div class="search-group">
+                <label class="search-filter-label" for="searchInput">Search Events</label>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-input" 
+                    placeholder="Search events..."
+                    oninput="filterEvents()"
+                >
             </div>
-
-            <!-- Registered Events Section -->
-            <div class="dashboard-content">
-                <div class="section-header">
-                    <h2>My Registered Events</h2>
-                    <a href="index.html" class="btn btn-primary">Browse More Events</a>
-                </div>
-
-                <div id="registeredEventsGrid" class="events-grid">
-                    <div class="loading-spinner">Loading your registrations...</div>
-                </div>
-
-                <div id="noRegistrations" class="no-events" style="display: none;">
-                    <p>You haven't registered for any events yet.</p>
-                    <a href="index.html" class="btn btn-primary">Explore Events</a>
-                </div>
+            <div class="filter-group">
+                <label class="search-filter-label" for="categoryFilter">Category</label>
+                <select id="categoryFilter" class="filter-select" onchange="filterEvents()">
+                    <option value="">All Categories</option>
+                    <option value="technical">Technical</option>
+                    <option value="cultural">Cultural</option>
+                    <option value="sports">Sports</option>
+                    <option value="workshop">Workshop</option>
+                    <option value="seminar">Seminar</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="search-filter-label" for="sortFilter">Sort By</label>
+                <select id="sortFilter" class="filter-select" onchange="filterEvents()">
+                    <option value="date">Date</option>
+                    <option value="name">Name</option>
+                    <option value="category">Category</option>
+                </select>
             </div>
         </div>
     </section>
 
-    <!-- Event Detail Modal -->
-    <div id="eventModal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <div id="modalBody">
-                <!-- Event details will be loaded here -->
+    <!-- Events Grid Section -->
+    <section class="events-section">
+        <div class="section-header">
+            <h2 class="section-title">Upcoming Events</h2>
+            <p class="section-subtitle">Discover and register for exciting campus activities</p>
+        </div>
+
+        <div id="eventsGrid" class="events-grid">
+            <!-- Sample Event Cards (will be generated dynamically) -->
+        </div>
+
+        <!-- Empty State (hidden by default) -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <div class="empty-state-icon">🔍</div>
+            <h3>No Events Found</h3>
+            <p>Try adjusting your search or filters</p>
+        </div>
+    </section>
+
+    <!-- Event Details Modal -->
+    <div id="eventModal" class="modal-overlay" onclick="closeEventModalOnOverlay(event)">
+        <div class="event-modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close-btn" onclick="closeEventModal()">&times;</button>
+            
+            <div class="modal-poster" id="modalPoster">
+                Event Poster
+            </div>
+
+            <div class="modal-content">
+                <h2 class="modal-title" id="modalTitle">Event Title</h2>
+
+                <div class="modal-meta-grid">
+                    <div class="modal-meta-item">
+                        <span class="modal-meta-icon">📅</span>
+                        <div class="modal-meta-text">
+                            <span class="modal-meta-label">Date</span>
+                            <span class="modal-meta-value" id="modalDate">-</span>
+                        </div>
+                    </div>
+                    <div class="modal-meta-item">
+                        <span class="modal-meta-icon">🕐</span>
+                        <div class="modal-meta-text">
+                            <span class="modal-meta-label">Time</span>
+                            <span class="modal-meta-value" id="modalTime">-</span>
+                        </div>
+                    </div>
+                    <div class="modal-meta-item">
+                        <span class="modal-meta-icon">📍</span>
+                        <div class="modal-meta-text">
+                            <span class="modal-meta-label">Venue</span>
+                            <span class="modal-meta-value" id="modalVenue">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-description">
+                    <h3>About This Event</h3>
+                    <p id="modalDescription">Event description goes here...</p>
+                </div>
+
+                <div class="modal-info-row">
+                    <div class="modal-info-badge category">
+                        <span>📂</span>
+                        <span id="modalCategory">Category</span>
+                    </div>
+                    <div class="modal-info-badge capacity">
+                        <span>👥</span>
+                        <span id="modalCapacity">Max: 0</span>
+                    </div>
+                    <div class="modal-info-badge seats">
+                        <span>🎫</span>
+                        <span id="modalSeats">Seats Left: 0</span>
+                    </div>
+                </div>
+
+                <button class="modal-register-btn" id="modalRegisterBtn" onclick="registerForEvent()">
+                    Register Now
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Campus Event Management System. All rights reserved.</p>
-        </div>
-    </footer>
-
     <!-- Scripts -->
     <script type="module">
-        import { supabase } from './js/supabase.js?v=4';
-        import { checkAuthAndRole, handleLogout } from './js/auth.js?v=4';
-        import { loadStudentRegistrations, unregisterFromEvent } from './js/dashboard.js?v=4';
+        let allEvents = [];
+        let currentEventId = null;
 
-        // Check if user is authenticated and has student role
-        await checkAuthAndRole('student');
+        // Load approved events from Supabase
+        async function loadEvents() {
+            try {
+                const { supabase, getPublicUrl } = await import('./js/supabase.js');
+                
+                const { data: events, error } = await supabase
+                    .from('events')
+                    .select(`
+                        *,
+                        organizer:profiles!events_organizer_id_fkey(name)
+                    `)
+                    .eq('status', 'approved')
+                    .order('event_date', { ascending: true });
 
-        // Load student's registered events
-        loadStudentRegistrations();
+                if (error) {
+                    console.error('Error loading events:', error);
+                    return;
+                }
 
-        // Logout functionality
-        document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+                console.log('Loaded approved events:', events);
+
+                // Transform events to match expected format
+                allEvents = events.map(event => ({
+                    id: event.id,
+                    title: event.title,
+                    date: event.event_date,
+                    time: event.event_time,
+                    venue: event.venue,
+                    category: event.category || 'general',
+                    description: event.description || '',
+                    maxParticipants: event.capacity,
+                    registeredCount: 0, // Will be calculated from registrations
+                    poster: event.poster_url ? getPublicUrl(event.poster_url) : null,
+                    organizerName: event.organizer?.name || 'Unknown'
+                }));
+
+                renderEvents(allEvents);
+            } catch (err) {
+                console.error('Exception loading events:', err);
+            }
+        }
+
+        // Render events on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadEvents();
+        });
+
+        // Render events grid
+        function renderEvents(events) {
+            const eventsGrid = document.getElementById('eventsGrid');
+            const emptyState = document.getElementById('emptyState');
+
+            if (events.length === 0) {
+                eventsGrid.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            eventsGrid.innerHTML = events.map(event => `
+                <div class="event-card" onclick="openEventModal('${event.id}')">
+                    <div class="event-poster">
+                        ${event.poster ? `<img src="${event.poster}" alt="${event.title}">` : event.title}
+                    </div>
+                    <div class="event-content">
+                        <h3 class="event-title">${event.title}</h3>
+                        <div class="event-meta">
+                            <div class="event-meta-item">
+                                <span class="event-meta-icon">📅</span>
+                                <span>${formatDate(event.date)}</span>
+                            </div>
+                            <div class="event-meta-item">
+                                <span class="event-meta-icon">🕐</span>
+                                <span>${event.time}</span>
+                            </div>
+                            <div class="event-meta-item">
+                                <span class="event-meta-icon">📍</span>
+                                <span>${event.venue}</span>
+                            </div>
+                        </div>
+                        <div class="event-footer">
+                            <span class="event-category">${event.category}</span>
+                            <button class="register-btn" onclick="event.stopPropagation(); openEventModal(${event.id})">
+                                Register
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter events
+        function filterEvents() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const sortFilter = document.getElementById('sortFilter').value;
+
+            let filtered = allEvents.filter(event => {
+                const matchesSearch = event.title.toLowerCase().includes(searchTerm) || 
+                                     event.description.toLowerCase().includes(searchTerm);
+                const matchesCategory = !categoryFilter || event.category === categoryFilter;
+                return matchesSearch && matchesCategory;
+            });
+
+            // Sort events
+            if (sortFilter === 'name') {
+                filtered.sort((a, b) => a.title.localeCompare(b.title));
+            } else if (sortFilter === 'category') {
+                filtered.sort((a, b) => a.category.localeCompare(b.category));
+            } else {
+                filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+            }
+
+            renderEvents(filtered);
+        }
+
+        // Open event modal
+        function openEventModal(eventId) {
+            currentEventId = eventId;
+            const modal = document.getElementById('eventModal');
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+
+            loadEventDetails(eventId);
+        }
+
+        // Close event modal
+        function closeEventModal() {
+            const modal = document.getElementById('eventModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+            currentEventId = null;
+        }
+
+        // Close modal on overlay click
+        function closeEventModalOnOverlay(event) {
+            if (event.target.id === 'eventModal') {
+                closeEventModal();
+            }
+        }
+
+        // Load event details
+        function loadEventDetails(eventId) {
+            const event = allEvents.find(e => e.id === eventId);
+            if (!event) return;
+
+            document.getElementById('modalTitle').textContent = event.title;
+            document.getElementById('modalDate').textContent = formatDate(event.date);
+            document.getElementById('modalTime').textContent = event.time;
+            document.getElementById('modalVenue').textContent = event.venue;
+            document.getElementById('modalDescription').textContent = event.description;
+            document.getElementById('modalCategory').textContent = event.category.charAt(0).toUpperCase() + event.category.slice(1);
+            document.getElementById('modalCapacity').textContent = `Max: ${event.maxParticipants}`;
+            
+            const seatsLeft = event.maxParticipants - event.registeredCount;
+            document.getElementById('modalSeats').textContent = `Seats Left: ${seatsLeft}`;
+
+            // Update poster
+            const modalPoster = document.getElementById('modalPoster');
+            if (event.poster) {
+                modalPoster.innerHTML = `<img src="${event.poster}" alt="${event.title}">`;
+            } else {
+                modalPoster.textContent = event.title;
+            }
+
+            // Disable register button if full
+            const registerBtn = document.getElementById('modalRegisterBtn');
+            if (seatsLeft <= 0) {
+                registerBtn.disabled = true;
+                registerBtn.textContent = 'Event Full';
+            } else {
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Register Now';
+            }
+        }
+
+        // Register for event
+        async function registerForEvent() {
+            if (!currentEventId) return;
+
+            const event = allEvents.find(e => e.id === currentEventId);
+            if (!event) return;
+
+            try {
+                const { supabase } = await import('./js/supabase.js');
+                const { getCurrentUser } = await import('./js/auth.js');
+                
+                const currentUser = await getCurrentUser();
+                if (!currentUser) {
+                    alert('Please login to register for events');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // Check if already registered
+                const { data: existingReg, error: checkError } = await supabase
+                    .from('registrations')
+                    .select('id')
+                    .eq('event_id', currentEventId)
+                    .eq('student_id', currentUser.id)
+                    .single();
+
+                if (existingReg) {
+                    alert('You are already registered for this event!');
+                    return;
+                }
+
+                // Register using the register_student function (handles capacity atomically)
+                const { data, error } = await supabase.rpc('register_student', {
+                    p_event_id: currentEventId,
+                    p_student_id: currentUser.id
+                });
+
+                if (error) {
+                    console.error('Registration error:', error);
+                    if (error.message.includes('event_full')) {
+                        alert('Sorry, this event is full!');
+                    } else if (error.message.includes('duplicate_registration')) {
+                        alert('You are already registered for this event!');
+                    } else if (error.message.includes('event_not_approved')) {
+                        alert('This event is not yet approved for registration.');
+                    } else {
+                        alert('Failed to register. Please try again.');
+                    }
+                    return;
+                }
+
+                console.log('Successfully registered for:', event.title);
+                
+                // Send confirmation email
+                try {
+                    await supabase.functions.invoke('send-registration-email', {
+                        body: {
+                            to: currentUser.email,
+                            eventName: event.title,
+                            userName: currentUser.profile?.name || 'Student',
+                            eventDate: new Date(event.date).toLocaleDateString('en-US', { 
+                                weekday: 'long', 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                            }),
+                            eventTime: event.time,
+                            venue: event.venue
+                        }
+                    });
+                    alert(`Successfully registered for ${event.title}!\n\nA confirmation email has been sent to ${currentUser.email}`);
+                } catch (emailError) {
+                    console.error('Email error:', emailError);
+                    alert(`Successfully registered for ${event.title}!\n\nNote: Confirmation email could not be sent.`);
+                }
+                
+                // Close modal
+                closeEventModal();
+                
+                // Reload events to update capacity
+                loadEvents();
+            } catch (err) {
+                console.error('Registration exception:', err);
+                alert('An error occurred. Please try again.');
+            }
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { month: 'short', day: 'numeric', year: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('eventModal');
+                if (modal.classList.contains('show')) {
+                    closeEventModal();
+                }
+            }
+        });
+
+        // Logout button
+        // Expose functions to window for onclick handlers
+        window.openEventModal = openEventModal;
+        window.closeEventModal = closeEventModal;
+        window.registerForEvent = registerForEvent;
+        window.filterEvents = filterEvents;
+
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            const { handleLogout } = await import('./js/auth.js');
+            await handleLogout();
+        });
     </script>
 </body>
 </html>

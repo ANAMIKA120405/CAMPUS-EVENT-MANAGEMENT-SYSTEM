@@ -4,150 +4,1057 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Faculty Dashboard - Campus Events</title>
-    <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/components.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #eef2ff 0%, #f8f9ff 100%);
+            min-height: 100vh;
+            color: #1f2937;
+            padding-top: 70px;
+        }
+
+        /* Fixed Navbar */
+        .dashboard-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+        }
+
+        .dashboard-navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .navbar-brand img {
+            height: 42px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .navbar-brand h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0F1E3F;
+            margin: 0;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logout-btn {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #0F1E3F, #1B3358);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 8px rgba(15, 30, 63, 0.15);
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(15, 30, 63, 0.25);
+        }
+
+        /* Mini Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, #eef2ff 0%, #f8f9ff 100%);
+            padding: 40px 32px;
+            text-align: center;
+            border-bottom: 1px solid rgba(15, 30, 63, 0.08);
+        }
+
+        .hero-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0F1E3F;
+            margin-bottom: 12px;
+        }
+
+        .hero-subtitle {
+            font-size: 16px;
+            color: #6b7280;
+            font-weight: 400;
+        }
+
+        /* Pending Events Section */
+        .pending-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 32px;
+        }
+
+        .section-header {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #0F1E3F;
+            margin-bottom: 8px;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* Event Cards */
+        .events-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .event-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            border-color: rgba(15, 30, 63, 0.1);
+        }
+
+        .event-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            gap: 16px;
+        }
+
+        .event-card-title-section {
+            flex: 1;
+        }
+
+        .event-card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0F1E3F;
+            margin-bottom: 8px;
+        }
+
+        .event-organizer {
+            font-size: 13px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .event-organizer span {
+            color: #0F1E3F;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-badge.pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .event-meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 16px;
+        }
+
+        .event-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #4b5563;
+        }
+
+        .event-meta-icon {
+            font-size: 16px;
+        }
+
+        .event-category-pill {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: capitalize;
+            margin-bottom: 16px;
+        }
+
+        .event-category-pill.technical {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .event-category-pill.cultural {
+            background: #fce7f3;
+            color: #be185d;
+        }
+
+        .event-category-pill.sports {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .event-category-pill.workshop {
+            background: #fed7aa;
+            color: #c2410c;
+        }
+
+        .event-category-pill.seminar {
+            background: #e9d5ff;
+            color: #7c3aed;
+        }
+
+        .event-category-pill.other {
+            background: #e5e7eb;
+            color: #4b5563;
+        }
+
+        .event-description {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .approve-btn {
+            background: linear-gradient(135deg, #1dbf73, #16a864);
+            color: white;
+        }
+
+        .approve-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(29, 191, 115, 0.3);
+        }
+
+        .reject-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff5252);
+            color: white;
+        }
+
+        .reject-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 32px;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Approval Modal Card */
+        .approval-modal-card {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 28px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f3f4f6;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 20px;
+            color: #4b5563;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+        }
+
+        .modal-close-btn:hover {
+            background: #e5e7eb;
+            transform: rotate(90deg);
+        }
+
+        .modal-poster {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #0F1E3F, #1B3358);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .modal-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-content h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0F1E3F;
+            margin-bottom: 20px;
+        }
+
+        .modal-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .modal-info-item {
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .modal-info-label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .modal-info-value {
+            font-size: 14px;
+            color: #0F1E3F;
+            font-weight: 600;
+        }
+
+        .modal-description {
+            margin-bottom: 24px;
+        }
+
+        .modal-description h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0F1E3F;
+            margin-bottom: 8px;
+        }
+
+        .modal-description p {
+            font-size: 14px;
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .modal-action-btn {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-approve-btn {
+            background: linear-gradient(135deg, #1dbf73, #16a864);
+            color: white;
+        }
+
+        .modal-approve-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(29, 191, 115, 0.3);
+        }
+
+        .modal-reject-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff5252);
+            color: white;
+        }
+
+        .modal-reject-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Rejection Reason Section */
+        .rejection-reason-section {
+            display: none;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 2px solid #f3f4f6;
+        }
+
+        .rejection-reason-section.show {
+            display: block;
+        }
+
+        .rejection-reason-section h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0F1E3F;
+            margin-bottom: 12px;
+        }
+
+        .rejection-reason-section textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            color: #1f2937;
+            resize: vertical;
+            min-height: 100px;
+            transition: all 0.25s ease;
+        }
+
+        .rejection-reason-section textarea:focus {
+            outline: none;
+            border-color: #0F1E3F;
+            box-shadow: 0 0 0 3px rgba(15, 30, 63, 0.1);
+        }
+
+        .rejection-reason-section button {
+            margin-top: 12px;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #ff6b6b, #ff5252);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .rejection-reason-section button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-navbar-container {
+                padding: 14px 20px;
+            }
+
+            .navbar-brand h2 {
+                font-size: 16px;
+            }
+
+            .navbar-brand img {
+                height: 36px;
+            }
+
+            .logout-btn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+
+            .hero-section {
+                padding: 32px 20px;
+            }
+
+            .hero-title {
+                font-size: 26px;
+            }
+
+            .hero-subtitle {
+                font-size: 14px;
+            }
+
+            .pending-section {
+                padding: 32px 20px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+
+            .event-card {
+                padding: 20px;
+            }
+
+            .event-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .event-card-title {
+                font-size: 18px;
+            }
+
+            .event-meta-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .event-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+
+            .modal-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+
+            .approval-modal-card {
+                max-height: 90vh;
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-brand h2 {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 22px;
+            }
+
+            .event-card-title {
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- ========================================
-         NAVIGATION BAR
-         Shared component across all dashboards
-    ========================================= -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand">
-                <img src="/assets/images/jain-logo.png" alt="Jain University Logo" class="brand-logo">
-                <h2>Campus Events</h2>
+    <!-- Fixed Navbar -->
+    <nav class="dashboard-navbar">
+        <div class="dashboard-navbar-container">
+            <div class="navbar-brand">
+                <img src="/assets/images/jain-logo.png" alt="Campus Events Logo">
+                <h2>Faculty Dashboard</h2>
             </div>
-            <div class="nav-menu">
-                <a href="index.html" class="nav-link">Home</a>
-                <a href="faculty-dashboard.html" class="nav-link active">Dashboard</a>
-                <!-- Populated dynamically with authenticated user's name -->
-                <span class="user-name" id="userName"></span>
-                <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+            <div class="navbar-actions">
+                <button id="logoutBtn" class="logout-btn">Logout</button>
             </div>
         </div>
     </nav>
 
-    <!-- ========================================
-         FACULTY DASHBOARD HEADER
-         Role-specific: Faculty Coordinator view
-    ========================================= -->
-    <section class="dashboard-header">
-        <div class="container">
-            <h1>Faculty Coordinator Dashboard</h1>
-            <p>Review and approve campus events</p>
+    <!-- Mini Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Event Approval Panel</h1>
+            <p class="hero-subtitle">Review and approve organizer-submitted events.</p>
         </div>
     </section>
 
-    <!-- ========================================
-         FACULTY DASHBOARD CONTENT
-         Main faculty interface for event monitoring
-    ========================================= -->
-    <section class="dashboard-section">
-        <div class="container">
-            <!-- Event Statistics Cards -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">⏳</div>
-                    <div class="stat-info">
-                        <!-- Dynamically updated from database -->
-                        <h3 id="pendingCount">0</h3>
-                        <p>Pending Events</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">✅</div>
-                    <div class="stat-info">
-                        <h3 id="approvedCount">0</h3>
-                        <p>Approved Events</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">❌</div>
-                    <div class="stat-info">
-                        <h3 id="rejectedCount">0</h3>
-                        <p>Rejected Events</p>
-                    </div>
-                </div>
-            </div>
+    <!-- Pending Events Section -->
+    <section class="pending-section">
+        <div class="section-header">
+            <h2 class="section-title">Pending Approvals</h2>
+            <p class="section-subtitle">Review these events and take action</p>
+        </div>
 
-            <!-- Event List Section with Filters -->
-            <div class="dashboard-content">
-                <div class="section-header">
-                    <h2>Pending Events for Review</h2>
-                    <!-- Filter controls for event status -->
-                    <div class="filter-buttons">
-                        <button class="btn btn-secondary filter-btn active" data-filter="pending">Pending</button>
-                        <button class="btn btn-secondary filter-btn" data-filter="approved">Approved</button>
-                        <button class="btn btn-secondary filter-btn" data-filter="rejected">Rejected</button>
-                    </div>
-                </div>
+        <div id="eventsContainer" class="events-container">
+            <!-- Event cards will be rendered here -->
+        </div>
 
-                <!-- Event cards populated dynamically via JavaScript -->
-                <div id="eventsGrid" class="events-grid">
-                    <div class="loading-spinner">Loading events...</div>
-                </div>
-
-                <!-- Empty state message (hidden by default) -->
-                <div id="noEvents" class="no-events" style="display: none;">
-                    <p>No events found.</p>
-                </div>
-            </div>
+        <!-- Empty State (hidden by default) -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <div class="empty-state-icon">✅</div>
+            <h3>No events awaiting approval</h3>
+            <p>All caught up! You'll see new submissions here.</p>
         </div>
     </section>
 
-    <!-- ========================================
-         EVENT REVIEW MODAL
-         Reusable modal for detailed event review
-    ========================================= -->
-    <div id="reviewModal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <!-- Modal body content injected dynamically -->
-            <div id="reviewModalBody">
-                <!-- Event review details will be loaded here -->
+    <!-- Approval Modal -->
+    <div id="approvalModal" class="modal-overlay" onclick="closeModalOnOverlay(event)">
+        <div class="approval-modal-card" onclick="event.stopPropagation()">
+            <button class="modal-close-btn" onclick="closeApprovalModal()">&times;</button>
+            
+            <div class="modal-poster" id="modalPoster">
+                Event Poster
+            </div>
+
+            <div class="modal-content">
+                <h2 id="modalTitle">Event Title</h2>
+
+                <div class="modal-info-grid">
+                    <div class="modal-info-item">
+                        <div class="modal-info-label">Organizer</div>
+                        <div class="modal-info-value" id="modalOrganizer">-</div>
+                    </div>
+                    <div class="modal-info-item">
+                        <div class="modal-info-label">Category</div>
+                        <div class="modal-info-value" id="modalCategory">-</div>
+                    </div>
+                    <div class="modal-info-item">
+                        <div class="modal-info-label">Date</div>
+                        <div class="modal-info-value" id="modalDate">-</div>
+                    </div>
+                    <div class="modal-info-item">
+                        <div class="modal-info-label">Time</div>
+                        <div class="modal-info-value" id="modalTime">-</div>
+                    </div>
+                    <div class="modal-info-item">
+                        <div class="modal-info-label">Venue</div>
+                        <div class="modal-info-value" id="modalVenue">-</div>
+                    </div>
+                    <div class="modal-info-item">
+                        <div class="modal-info-label">Max Participants</div>
+                        <div class="modal-info-value" id="modalCapacity">-</div>
+                    </div>
+                </div>
+
+                <div class="modal-description">
+                    <h3>Event Description</h3>
+                    <p id="modalDescription">-</p>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="modal-action-btn modal-approve-btn" onclick="approveEvent()">
+                        ✓ Approve Event
+                    </button>
+                    <button class="modal-action-btn modal-reject-btn" onclick="showRejectionReason()">
+                        ✕ Reject Event
+                    </button>
+                </div>
+
+                <!-- Rejection Reason Section (hidden by default) -->
+                <div id="rejectionReasonSection" class="rejection-reason-section">
+                    <h4>Rejection Reason</h4>
+                    <textarea 
+                        id="rejectionReasonInput" 
+                        placeholder="Please provide a reason for rejection..."
+                    ></textarea>
+                    <button onclick="rejectEvent()">Submit Rejection</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- ========================================
-         FOOTER
-         Shared component across all pages
-    ========================================= -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2025 Campus Event Management System. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- ========================================
-         SCRIPTS - Faculty Dashboard Logic
-         Role-restricted: Faculty access only
-    ========================================= -->
+    <!-- Scripts -->
     <script type="module">
-        import { supabase } from './js/supabase.js';
-        import { checkAuthAndRole, handleLogout } from './js/auth.js';
-        import { loadFacultyEvents, approveEvent, rejectEvent } from './js/dashboard.js';
+        let allEvents = [];
+        let currentEventId = null;
 
-        // Enforce faculty role requirement - redirects unauthorized users
-        await checkAuthAndRole('faculty');
+        // Load events from Supabase
+        async function loadEvents() {
+            try {
+                const { supabase } = await import('./js/supabase.js');
+                
+                const { data: events, error } = await supabase
+                    .from('events')
+                    .select(`
+                        *,
+                        organizer:profiles!events_organizer_id_fkey(name)
+                    `)
+                    .order('created_at', { ascending: false });
 
-        // Initialize dashboard with pending events
-        loadFacultyEvents('pending');
+                if (error) {
+                    console.error('Error loading events:', error);
+                    return;
+                }
 
-        // Event status filter functionality
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        filterButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterButtons.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const filter = btn.getAttribute('data-filter');
-                loadFacultyEvents(filter);
-            });
+                console.log('Loaded events:', events);
+
+                // Transform events to match the expected format
+                allEvents = events.map(event => ({
+                    id: event.id,
+                    title: event.title,
+                    organizerName: event.organizer?.name || 'Unknown',
+                    date: event.event_date,
+                    time: event.event_time,
+                    venue: event.venue,
+                    category: event.category || 'general',
+                    description: event.description || '',
+                    maxParticipants: event.capacity,
+                    status: event.status,
+                    poster: event.poster_url
+                }));
+
+                // Render pending events
+                renderPendingEvents();
+            } catch (err) {
+                console.error('Exception loading events:', err);
+            }
+        }
+
+        // Render events on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadEvents();
         });
 
-        // Logout handler
-        document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+        // Render pending events
+        function renderPendingEvents() {
+            const pendingEvents = allEvents.filter(e => e.status === 'pending');
+            const eventsContainer = document.getElementById('eventsContainer');
+            const emptyState = document.getElementById('emptyState');
+
+            if (pendingEvents.length === 0) {
+                eventsContainer.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            eventsContainer.innerHTML = pendingEvents.map(event => `
+                <div class="event-card" onclick="openApprovalModal('${event.id}')">
+                    <div class="event-card-header">
+                        <div class="event-card-title-section">
+                            <h3 class="event-card-title">${event.title}</h3>
+                            <p class="event-organizer">Submitted by: <span>${event.organizerName}</span></p>
+                        </div>
+                        <span class="status-badge pending">Pending</span>
+                    </div>
+
+                    <div class="event-meta-row">
+                        <div class="event-meta-item">
+                            <span class="event-meta-icon">📅</span>
+                            <span>${formatDate(event.date)}</span>
+                        </div>
+                        <div class="event-meta-item">
+                            <span class="event-meta-icon">🕐</span>
+                            <span>${event.time}</span>
+                        </div>
+                        <div class="event-meta-item">
+                            <span class="event-meta-icon">📍</span>
+                            <span>${event.venue}</span>
+                        </div>
+                    </div>
+
+                    <span class="event-category-pill ${event.category}">${event.category}</span>
+
+                    <p class="event-description">${event.description.substring(0, 150)}...</p>
+
+                    <div class="event-actions">
+                        <button class="action-btn approve-btn" onclick="event.stopPropagation(); openApprovalModal('${event.id}')">
+                            ✓ Approve
+                        </button>
+                        <button class="action-btn reject-btn" onclick="event.stopPropagation(); openApprovalModal('${event.id}', true)">
+                            ✕ Reject
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Open approval modal
+        function openApprovalModal(eventId, showRejection = false) {
+            currentEventId = eventId;
+            const modal = document.getElementById('approvalModal');
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+
+            loadPendingEventDetails(eventId);
+
+            if (showRejection) {
+                setTimeout(() => showRejectionReason(), 300);
+            }
+        }
+
+        // Close approval modal
+        function closeApprovalModal() {
+            const modal = document.getElementById('approvalModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+            currentEventId = null;
+            
+            // Hide rejection reason section
+            const rejectionSection = document.getElementById('rejectionReasonSection');
+            rejectionSection.classList.remove('show');
+            document.getElementById('rejectionReasonInput').value = '';
+        }
+
+        // Close modal on overlay click
+        function closeModalOnOverlay(event) {
+            if (event.target.id === 'approvalModal') {
+                closeApprovalModal();
+            }
+        }
+
+        // Load event details in modal
+        function loadPendingEventDetails(eventId) {
+            const event = allEvents.find(e => e.id === eventId);
+            if (!event) return;
+
+            document.getElementById('modalTitle').textContent = event.title;
+            document.getElementById('modalOrganizer').textContent = event.organizerName;
+            document.getElementById('modalCategory').textContent = event.category.charAt(0).toUpperCase() + event.category.slice(1);
+            document.getElementById('modalDate').textContent = formatDate(event.date);
+            document.getElementById('modalTime').textContent = event.time;
+            document.getElementById('modalVenue').textContent = event.venue;
+            document.getElementById('modalCapacity').textContent = event.maxParticipants;
+            document.getElementById('modalDescription').textContent = event.description;
+
+            // Update poster
+            const modalPoster = document.getElementById('modalPoster');
+            if (event.poster) {
+                modalPoster.innerHTML = `<img src="${event.poster}" alt="${event.title}">`;
+            } else {
+                modalPoster.textContent = event.title;
+            }
+        }
+
+        // Show rejection reason section
+        function showRejectionReason() {
+            const rejectionSection = document.getElementById('rejectionReasonSection');
+            rejectionSection.classList.add('show');
+            document.getElementById('rejectionReasonInput').focus();
+        }
+
+        // Approve event
+        async function approveEvent() {
+            if (!currentEventId) return;
+
+            const event = allEvents.find(e => e.id === currentEventId);
+            if (!event) return;
+
+            try {
+                const { supabase } = await import('./js/supabase.js');
+                
+                const { error } = await supabase
+                    .from('events')
+                    .update({ status: 'approved' })
+                    .eq('id', currentEventId);
+
+                if (error) {
+                    console.error('Error approving event:', error);
+                    alert('Failed to approve event. Please try again.');
+                    return;
+                }
+
+                console.log('Event approved:', event.title);
+                alert(`Event "${event.title}" has been approved! ✓\n\nThe organizer will be notified.`);
+                
+                // Update local status
+                event.status = 'approved';
+                
+                // Close modal and refresh
+                closeApprovalModal();
+                renderPendingEvents();
+            } catch (err) {
+                console.error('Exception approving event:', err);
+                alert('An error occurred. Please try again.');
+            }
+        }
+
+        // Reject event
+        async function rejectEvent() {
+            if (!currentEventId) return;
+
+            const reason = document.getElementById('rejectionReasonInput').value.trim();
+            if (!reason) {
+                alert('Please provide a reason for rejection.');
+                return;
+            }
+
+            const event = allEvents.find(e => e.id === currentEventId);
+            if (!event) return;
+
+            try {
+                const { supabase } = await import('./js/supabase.js');
+                
+                const { error } = await supabase
+                    .from('events')
+                    .update({ status: 'rejected' })
+                    .eq('id', currentEventId);
+
+                if (error) {
+                    console.error('Error rejecting event:', error);
+                    alert('Failed to reject event. Please try again.');
+                    return;
+                }
+
+                console.log('Event rejected:', event.title, 'Reason:', reason);
+                alert(`Event "${event.title}" has been rejected. ✕\n\nReason: ${reason}\n\nThe organizer will be notified.`);
+            
+                // Update local status
+                event.status = 'rejected';
+                event.rejectionReason = reason;
+                
+                // Close modal and refresh
+                closeApprovalModal();
+                renderPendingEvents();
+            } catch (err) {
+                console.error('Exception rejecting event:', err);
+                alert('An error occurred. Please try again.');
+            }
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const options = { month: 'short', day: 'numeric', year: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('approvalModal');
+                if (modal.classList.contains('show')) {
+                    closeApprovalModal();
+                }
+            }
+        });
+
+        // Make functions globally accessible
+        window.openApprovalModal = openApprovalModal;
+        window.closeApprovalModal = closeApprovalModal;
+        window.approveEvent = approveEvent;
+        window.rejectEvent = rejectEvent;
+        window.closeModalOnOverlay = closeModalOnOverlay;
+        window.showRejectionReason = showRejectionReason;
+
+        // Logout button
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            const { handleLogout } = await import('./js/auth.js');
+            await handleLogout();
+        });
     </script>
 </body>
 </html>
